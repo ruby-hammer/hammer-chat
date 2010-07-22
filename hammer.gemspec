@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{hammer}
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Petr Chalupa"]
@@ -99,8 +99,7 @@ Gem::Specification.new do |s|
      "lib/hammer/widget/form_part/select.rb",
      "lib/hammer/widget/form_part/textarea.rb",
      "lib/hammer/widget/layout.rb",
-     "lib/hammer/widget/optionable_collection.rb",
-     "lib/ruby-hammer.rb.rb"
+     "lib/hammer/widget/optionable_collection.rb"
   ]
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
