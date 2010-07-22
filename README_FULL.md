@@ -19,7 +19,7 @@ Clone repository
 
     git clone git://github.com/ruby-hammer/hammer.git
 
-Install jeweler and install ruby-hammer gem
+Install jeweler and install hammer gem
 
     gem install jeweler
     rake install
@@ -33,7 +33,7 @@ install bundler and run Bundler
     gem install bundler
     bundle install
 
-use Ruby 1.9.(1|2) and run ruby-hammer
+use Ruby 1.9.(1|2) and run hammer
 
     hammer
 
@@ -48,10 +48,6 @@ Test application - Chat is running on [http://pitr.sytes.net:3005/](http://pitr.
 a basic implementation. It does not have any persistent backend, messages are limited to 50 in each room and rooms are
 dropped from memory after 4 hours of inactivity. You can login in each window as different person, nick and email
 for gravatar is required.
-
-### New name
-
-''Ruby Hammer'' was selected.
 
 ## {file:docs/contribute How to Contribute}
 
