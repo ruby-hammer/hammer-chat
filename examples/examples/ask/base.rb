@@ -7,16 +7,15 @@ module Examples
       # +counter+ is place where is counter stored or form would been
       attr_reader :numbers, :counter
 
-      def initial_state
+      after_initialize do
         @numbers = []
-        @counter = nil
       end
 
       def sum
         numbers.inject {|sum, num| sum + num }
       end
 
-      class Widget < Hammer::Widget::Component
+      class Widget < Hammer::Widget::Base
 
         def content
           strong 'Numbers:'
@@ -26,7 +25,7 @@ module Examples
             numbers.each_with_index do |number, index|
               text '+' if index > 0
               cb.a(number.to_s).event(:click).action! {
-                @counter = ask Examples::Ask::Counter, number do |answer|
+                @counter = ask Examples::Ask::Counter, :counter => number do |answer|
                   if answer
                     @numbers.delete_at(index)
                     @numbers.insert(index, answer)
@@ -45,7 +44,7 @@ module Examples
           if counter
             render counter
           else
-            cb.a('Select Number').event(:click).action! {
+            cb.a('Add Number').event(:click).action! {
               # if 'Select Number' is clicked, +counter+ is set and
               # ask-callback is set. Both blocks are evaluated inside
               # the same component.

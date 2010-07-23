@@ -3,14 +3,11 @@
 module Chat
   class Login < Hammer::Component::FormPart
 
-    def initialize(context, user)
-      super(context)
-      @record = user
-    end
-
     alias_method(:user, :record)
 
     class Widget < Hammer::Component::FormPart::Widget
+      wrap_in :div
+      
       def content
         p do
           h1 "Log in", :class => %w[ui-widget]

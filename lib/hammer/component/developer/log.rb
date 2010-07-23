@@ -7,25 +7,25 @@ module Hammer
 
         attr_reader :messages
 
-        def initial_state
+        after_initialize do
           @messages = []
           @limit = 200
 
           # observe log :message event
-          @observer = Hammer.logger.add_observer(:message) do |message|
-            Hammer.logger.silence(5) do # we don't want to end up in infinite loop
-              context.schedule do
-                Hammer.logger.silence(5) do
-                  add_message(message)
-                  context.actualize.send!
-                end
-              end
-            end
-          end
+          Hammer.logger.add_observer(:message, self, :new_message)
 
           # listen context for :drop event then delete observer to collect by GC
-          context.add_observer(:drop) do
-            Hammer.logger.delete_observer :message, @observer
+          context.add_observer(:drop) { Hammer.logger.delete_observer :message, self }
+        end
+
+        def new_message(message)
+          Hammer.logger.silence(5) do # we don't want to end up in infinite loop
+            context.schedule do
+              Hammer.logger.silence(5) do
+                add_message(message)
+                context.actualize.send!
+              end
+            end
           end
         end
 
@@ -36,7 +36,9 @@ module Hammer
           @messages.pop if @messages.size > @limit
         end
 
-        class Widget < Hammer::Widget::Component
+        class Widget < Hammer::Widget::Base
+          wrap_in(:div)
+
           def content
             h3 'Log'
 

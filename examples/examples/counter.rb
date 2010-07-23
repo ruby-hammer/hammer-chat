@@ -3,12 +3,9 @@ module Examples
   class Counter < Hammer::Component::Base
 
     attr_reader :counter
+    needs :counter => 0
 
-    def initial_state
-      @counter = 0
-    end
-
-    class Widget < Hammer::Widget::Component
+    class Widget < Hammer::Widget::Base
       def content
         h3 'Counter'
         p do

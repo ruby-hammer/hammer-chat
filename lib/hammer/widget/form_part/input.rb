@@ -1,14 +1,10 @@
-module Hammer
-  module Widget
-    module FormPart
-      class Input < Abstract
+module Hammer::Widget::FormPart
+  class Input < Abstract
 
-        needs :type => :text
+    needs :type => :text
 
-        def content
-          input({ :type => @type, :value => value(@value), :'data-value' => @value }.merge(@options))
-        end
-      end
+    def content
+      input({ :type => @type, :value => value(@value), :'data-value' => @value }.merge(@options))
     end
   end
 end

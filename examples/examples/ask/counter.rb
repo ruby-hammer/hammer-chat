@@ -3,11 +3,6 @@ module Examples
   module Ask
     class Counter < Examples::Counter
 
-      def initialize(context, number = 0)
-        super(context)
-        @counter = number
-      end
-
       class Widget < superclass.widget_class
 
         # adds links to answer the number (counter) or

@@ -1,13 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../../spec_helper')
 
 describe Hammer::Component::Developer::Inspection::Array do
+  include HammerMocks
 
   def self.array
     [:symbol, "str", 1]
   end
-  def array; self.class.array; end
+  
+  def array
+    self.class.array
+  end
 
-  let(:inspector) { Hammer::Component::Developer::Inspection::Array.new(nil, array) }
+  let(:inspector) { Hammer::Component::Developer::Inspection::Array.new(:context => context_mock, :obj => array) }
   subject { inspector }
 
   describe '#obj' do
@@ -16,7 +20,7 @@ describe Hammer::Component::Developer::Inspection::Array do
   end
 
   describe 'when unpacked' do
-    before { inspector.switch_packed }
+    before { inspector.toggle! }
 
     describe '#components' do
       subject { inspector.components }

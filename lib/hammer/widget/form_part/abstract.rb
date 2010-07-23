@@ -1,15 +1,8 @@
-module Hammer
-  module Widget
-    module FormPart
-      class Abstract < Widget::Component
-
-        wrap_in(:span)
-
-        needs \
-            :value => :value,
-            :options => {}
-
-      end
-    end
+module Hammer::Widget::FormPart
+  class Abstract < Hammer::Widget::Base
+    wrap_in(:span)
+    needs \
+        :value => :value,
+        :options => {}
   end
 end

@@ -3,6 +3,8 @@
 module Hammer
   module Runner
 
+    include Hammer::Config
+
     class << self
 
       def run!
@@ -10,8 +12,8 @@ module Hammer
         load_app_files
         Core::Base.run!
         setup_application
-        Hammer.logger.info "== Settings\n" + Config.pretty_inspect
-        Hammer.logger.level = Config[:logger][:level]
+        Hammer.logger.info "== Settings\n" + config.pretty_inspect
+        Hammer.logger.level = config[:logger][:level]
         Core::Application.run!
       end
 
@@ -24,9 +26,9 @@ module Hammer
       def setup_application
         Core::Application.set \
             :root => Dir.pwd,
-            :host => Config[:web][:host],
-            :port => Config[:web][:port],
-            :environment => Config[:web][:environment]
+            :host => config[:web][:host],
+            :port => config[:web][:port],
+            :environment => config[:web][:environment]
       end
 
       def encoding

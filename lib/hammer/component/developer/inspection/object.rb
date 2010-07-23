@@ -1,83 +1,66 @@
-module Hammer
-  module Component
-    module Developer
+module Hammer::Component::Developer::Inspection
+  class Object < Abstract
 
-      # Inspection components
-      module Inspection
+    needs :packed => true
+    attr_reader :components
 
+    # @option assigns [String] :label optional description
+    # @option assigns [Boolean] :packed inspector is initially packed?
+    def initialize(assigns = {})
+      super
+    end
 
-        class Object < Base
+    after_initialize { packed? ? pack : unpack }
 
-          attr_reader :obj, :label, :components
-          attr_writer :packed
+    # @return [Boolean] is inspector packed?
+    def packed?
+      @packed
+    end
 
-          # @param [Object] obj to inspect
-          # @param [String] label optional description
-          # @param [Boolean] packed inspector is initially packed?
-          def initialize(context, obj, label = nil, packed = true)
-            @obj, @packed, @label = obj, packed, label
-            super(context)            
-          end
+    # switches packed state and calls {#pack} or {#unpack} to change the state
+    def toggle!
+      @packed = !@packed
+      packed? ? pack : unpack
+    end
 
-          def initial_state
-            @packed ? pack : unpack
-          end
+    protected
 
-          # @return [Boolean] is inspector packed?
-          def packed?
-            @packed
-          end
+    # unpacks inspector, creates subinspectors for instance variables, constants etc.
+    def unpack
+      variables = obj.instance_variables.inject({}) {|hash, name| hash[name] = obj.instance_variable_get(name); hash }
+      @components = [ inspector(variables, :label => 'Instance variables') ]
+    end
 
-          # switches packed state and calls {#pack} or {#unpack} to change the state
-          def switch_packed
-            @packed = !@packed
-            @packed ? pack : unpack
-          end
+    # packs inspector, drops subinspectors
+    def pack
+      @components = []
+    end
 
-          protected
+    class Widget < Abstract::Widget
+      def content
+        packed
+        ul { unpacked } unless packed?
+      end
 
-          # unpacks inspector, creates subinspectors for instance variables, constants etc.
-          def unpack
-            @components = [
-              inspector(
-                obj.instance_variables.inject({}) {|hash, name| hash[name] = obj.instance_variable_get(name); hash },
-                'Instance variables')
-            ]
-          end
+      # renders packed form
+      def packed
+        cb.a("#{component_label}#{name}").event(:click).action! { toggle! }
+      end
 
-          # packs inspector, drops subinspectors
-          def pack
-            @components = []
-          end
+      # renders name of the inspector
+      def name
+        "##{obj.class}"
+      end
 
-          class Widget < Widget::Component
-            def content
-              packed
-              ul { unpacked } unless c.packed?
-            end
-
-            # renders packed form
-            def packed
-              cb.a("#{c.label ? c.label + ' ' : nil}#{name}").event(:click).action! { switch_packed }
-            end
-
-            # renders name of the inspector
-            def name
-              "##{c.obj.class}"
-            end
-
-            # renders unpacked form
-            def unpacked
-              li "size #{c.obj.size}" if c.obj.respond_to?(:size)
-              c.components.each do |c|
-                li { render c }
-              end
-            end
-
-          end
-
+      # renders unpacked form
+      def unpacked
+        li "size #{obj.size}" if obj.respond_to?(:size)
+        components.each do |c|
+          li { render c }
         end
       end
+
     end
+
   end
 end

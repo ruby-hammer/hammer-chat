@@ -1,14 +1,11 @@
 module Chat
   class MessageForm < Hammer::Component::FormPart
 
-    def initialize(context, message)
-      super(context)
-      @record = message
-    end
-
     alias_method(:message, :record)
 
     class Widget < Hammer::Component::FormPart::Widget
+      wrap_in :div
+      
       def content
         cb.a("Send").event(:click).form.action! {
             if message.valid?

@@ -1,11 +1,6 @@
 module Chat
   class RoomForm < Hammer::Component::FormPart
 
-    def initialize(context, room)
-      super(context)
-      @record = room
-    end
-
     alias_method(:room, :record)
 
     class Widget < Hammer::Component::FormPart::Widget

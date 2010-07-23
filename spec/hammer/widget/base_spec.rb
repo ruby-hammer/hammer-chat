@@ -3,6 +3,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Hammer::Widget::Base do
+  include HammerMocks
+
   module Foo
     class FooWidget < Hammer::Widget::Base
       wrap_in :span
@@ -12,7 +14,7 @@ describe Hammer::Widget::Base do
   end
 
   describe Foo::BooWidget, "#to_html", 'when wrap_in(nil)' do
-    subject { (@widget = Foo::BooWidget.new).to_html }
+    subject { (@widget = Foo::BooWidget.new(:component => component_mock)).to_html }
     it { should == "" }
   end
 
@@ -23,11 +25,15 @@ describe Hammer::Widget::Base do
     end
 
     describe "wrap_in", "#to_html" do
-      subject { (@widget = Foo::FooWidget.new).to_html }
+      subject { (@widget = Foo::FooWidget.new(:component => component_mock)).to_html }
       it { should == "<span class=\"#{Foo::FooWidget.css_class}\" id=\"#{@widget.object_id}\"></span>" }
 
       describe 'when subwidget' do
-        subject { (@widget = Foo::FooWidget.new {|w| w.widget @subwidget = Foo::FooWidget.new }).to_html }
+        subject do
+          (@widget = Foo::FooWidget.new(:component => component_mock) do |w|
+            w.widget @subwidget = Foo::FooWidget.new(:component => component_mock)
+          end).to_html
+        end
         it { should == "<span class=\"#{Foo::FooWidget.css_class}\" id=\"#{@widget.object_id}\">" +
               "<span class=\"#{Foo::FooWidget.css_class}\" id=\"#{@subwidget.object_id}\"></span></span>"}
       end
@@ -40,7 +46,11 @@ describe Hammer::Widget::Base do
 
     describe '#render' do
       describe "(a_widget)" do
-        subject { (@widget = Foo::FooWidget.new {|w| w.render @subwidget = Foo::FooWidget.new }).to_html }
+        subject do
+          (@widget = Foo::FooWidget.new(:component => component_mock) do |w|
+            w.render @subwidget = Foo::FooWidget.new(:component => component_mock)
+          end).to_html
+        end
         it { should == "<span class=\"#{Foo::FooWidget.css_class}\" id=\"#{@widget.object_id}\">" +
               "<span class=\"#{Foo::FooWidget.css_class}\" id=\"#{@subwidget.object_id}\"></span></span>"}
       end
@@ -54,12 +64,16 @@ describe Hammer::Widget::Base do
           end
         end
 
-        subject { (@widget = Foo::FooWidget.new {|w| w.render @obj = ObjectWithWidget.new }).to_html }
+        subject do
+          (@widget = Foo::FooWidget.new(:component => component_mock) do |w|
+            w.render @obj = ObjectWithWidget.new
+          end).to_html
+        end
         it { should == "<span class=\"#{Foo::FooWidget.css_class}\" id=\"#{@widget.object_id}\">3</span>"}
       end
 
       describe "(other)" do
-        subject { lambda { Foo::FooWidget.new {|w| w.render Object.new }.to_html} }
+        subject { lambda { Foo::FooWidget.new(:component => component_mock) {|w| w.render Object.new }.to_html} }
         it { should raise_error(ArgumentError) }
       end
     end

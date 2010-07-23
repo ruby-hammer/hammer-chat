@@ -6,17 +6,28 @@ describe Hammer::Component::FormPart do
   include HammerMocks
 
   class TestForm < Hammer::Component::FormPart
-
-    def initial_state
-      @record = Struct.new(:record, :value, :name).new
-    end
-
     class Widget < Hammer::Component::FormPart::Widget
+      wrap_in :div
     end
-
   end
 
-  let(:test_form) { TestForm.new(context_mock, @id = Object.new) }
+  let(:test_form) do
+    TestForm.new(
+      :context => context_mock,
+      :form => @form_id = Object.new,
+      :record => @struct = Struct.new(:record, :value, :name).new
+    )
+  end
+
+  describe '@record' do
+    it { test_form.record.should be_present }
+    it { test_form.record.should be_kind_of(Struct) }
+    it { test_form.record.should == @struct }
+  end
+
+  describe '@form' do
+    it { test_form.form.should == @form_id }
+  end
 
   describe '#set_value and #value' do
     describe "('value')" do

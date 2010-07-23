@@ -91,7 +91,9 @@ Gem::Specification.new do |s|
      "lib/hammer/exception/exceptions.rb",
      "lib/hammer/logger.rb",
      "lib/hammer/runner.rb",
+     "lib/hammer/widget/abstract.rb",
      "lib/hammer/widget/base.rb",
+     "lib/hammer/widget/callback.rb",
      "lib/hammer/widget/collection.rb",
      "lib/hammer/widget/component.rb",
      "lib/hammer/widget/form_part/abstract.rb",
@@ -99,7 +101,8 @@ Gem::Specification.new do |s|
      "lib/hammer/widget/form_part/select.rb",
      "lib/hammer/widget/form_part/textarea.rb",
      "lib/hammer/widget/layout.rb",
-     "lib/hammer/widget/optionable_collection.rb"
+     "lib/hammer/widget/optionable_collection.rb",
+     "lib/hammer/widget/wrapping.rb"
   ]
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]

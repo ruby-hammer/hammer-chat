@@ -1,0 +1,2 @@
+module Hammer::Widget    
+end

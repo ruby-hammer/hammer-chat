@@ -1,58 +1,75 @@
 # encoding: UTF-8
 
 module Hammer
-  Config = Configliere.new({
-      :web => {
-        :host => '0.0.0.0',
-        :port => 3000
-      },
-      :websocket => {
-        :host => '0.0.0.0',
-        :server => '127.0.0.1',
-        :port => 3001,
-        :debug => false,
-        :fibers => 10,
-      },
-      :layout_class => 'Hammer::Widget::Layout',
-      :environment => :development,
-      :js => { :send_log_back => false },
-      :logger => {
-        :level => 0,
-        :show_traffic => false,
-        :output => $stdout
-      },
-      :core => { :devel => 'devel' }
-    })
+  module Config
 
-  Config.use :env_var
-  Config.env_vars :environment => ENV['RACK_ENV']
-  Config.resolve!
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
+    def config
+      self.class.config
+    end
+
+    module ClassMethods
+      def config
+        @@config ||= begin c = Configliere.new({
+              :web => {
+                :host => '0.0.0.0',
+                :port => 3000
+              },
+              :websocket => {
+                :host => '0.0.0.0',
+                :server => '127.0.0.1',
+                :port => 3001,
+                :debug => false,
+                :fibers => 10,
+              },
+              :layout_class => 'Hammer::Widget::Layout',
+              :environment => :development,
+              :js => { :send_log_back => false },
+              :logger => {
+                :level => 0,
+                :show_traffic => false,
+                :output => $stdout
+              },
+              :core => { :devel => 'devel' }
+            })
+
+          c.use :env_var
+          c.env_vars :environment => ENV['RACK_ENV']
+          c.resolve!
     
-  Config.use :config_file
-  Config.read './config.yml'
-  Config.resolve!
+          c.use :config_file
+          c.read './config.yml'
+          c.resolve!
 
-  Config.use :define
-  Config.define 'web.host', :require => true, :type => String
-  Config.define 'web.port', :require => true, :type => Integer
-  Config.define 'websocket.host', :require => true, :type => String
-  Config.define 'websocket.server', :require => true, :type => String
-  Config.define 'websocket.port', :require => true, :type => Integer
-  Config.define 'websocket.debug', :require => true, :type => :boolean
-  Config.define 'websocket.fibers', :require => true, :type => Integer
-  Config.define 'root_class', :require => true, :type => String
-  Config.define 'layout_class', :require => true, :type => String,
-      :description => "Name of a layout class."
-  Config.define 'environment', :require => true, :type => Symbol
-  Config.define 'js.send_log_back', :require => true, :type => :boolean
-  Config.define 'logger.level', :require => true, :type => Integer
-  Config.define 'logger.show_traffic', :require => true, :type => :boolean
-  Config.define 'logger.output', :require => true
-  Config.define 'core.devel', :require => true, :type => String
-  Config.resolve!
+          c.use :define
+          c.define 'web.host', :require => true, :type => String
+          c.define 'web.port', :require => true, :type => Integer
+          c.define 'websocket.host', :require => true, :type => String
+          c.define 'websocket.server', :require => true, :type => String
+          c.define 'websocket.port', :require => true, :type => Integer
+          c.define 'websocket.debug', :require => true, :type => :boolean
+          c.define 'websocket.fibers', :require => true, :type => Integer
+          c.define 'root_class', :require => true, :type => String
+          c.define 'layout_class', :require => true, :type => String,
+              :description => "Name of a layout class."
+          c.define 'environment', :require => true, :type => Symbol
+          c.define 'js.send_log_back', :require => true, :type => :boolean
+          c.define 'logger.level', :require => true, :type => Integer
+          c.define 'logger.show_traffic', :require => true, :type => :boolean
+          c.define 'logger.output', :require => true
+          c.define 'core.devel', :require => true, :type => String
+          c.resolve!
   
-  Config.use :commandline
-  Config.resolve!  
+          c.use :commandline
+          c.resolve!
+          c
+        end
+      end
+    end
+  end
 end
 
 

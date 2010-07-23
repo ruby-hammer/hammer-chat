@@ -5,13 +5,11 @@ module Examples
     class Base < Hammer::Component::FormPart
 
       attr_reader :counter
-      def initial_state
-        super
-        @counter = 0
-        @record =  Struct.new("Data", :name, :sex, :description).new
-      end
+
+      after_initialize { @counter = 0 }
 
       class Widget < Hammer::Component::FormPart::Widget
+        wrap_in :div
 
         def content
           p do

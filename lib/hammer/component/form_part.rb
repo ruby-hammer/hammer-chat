@@ -1,10 +1,11 @@
 module Hammer
   module Component
-    class FormPart < Component::Base
+    class FormPart < Base
 
-      attr_accessor :form
+      needs :record, :form => nil
+      attr_reader :form, :record
 
-      attr_reader :record
+      after_initialize { @form ||= self}
 
       # values from form's tags are stored here. They are automatically updated when :form callback is triggered
       # @return [Object] value for +key+
@@ -28,17 +29,11 @@ module Hammer
         @record.send "#{key}=", value
       end
 
-      # @param [Object] form Identifies which form parts belongs together. +form+.object_id is used to identify
-      def initialize(context, form = self)
-        @form = form
-        super(context)
-      end
-
-      class Widget < Widget::Component
+      class Widget < Widget::Base
         protected
 
         def wrapper_options
-          super.merge :'data-form-id' => c.form.object_id, :'data-component-id' => c.object_id
+          super.merge :'data-form-id' => component.form.object_id, :'data-component-id' => component.object_id
         end
       end
     end

@@ -1,22 +1,18 @@
-module Hammer
-  module Component
-    module Developer
+module Hammer::Component::Developer::Inspection
 
-      class Inspection::Module < Inspection::Object
-        def unpack
-          super << inspector(
-            obj.constants.inject({}) {|hash, name| hash[name] = obj.const_get(name); hash },
-            'Constants') <<
-              inspector(obj.included_modules, 'Included Modules')
-        end
+  class Module < Object
+    def unpack
+      constants = obj.constants.inject({}) {|hash, name| hash[name] = obj.const_get(name); hash }
+      super << 
+          inspector(constants, :label => 'Constants') <<
+          inspector(obj.included_modules, :label => 'Included Modules')
+    end
 
-        class Widget < Inspection::Object::Widget
-          def name
-            c.obj.to_s
-          end
-        end
-
+    class Widget < Object::Widget
+      def name
+        obj.to_s
       end
     end
+
   end
 end

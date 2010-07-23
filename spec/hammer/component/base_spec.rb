@@ -6,7 +6,7 @@ describe Hammer::Component::Base do
   include HammerMocks
 
   class FooComponent < Hammer::Component::Base
-    class Widget < Hammer::Widget::Component
+    class Widget < Hammer::Widget::Base
       def content
         text 'foo content'
       end
@@ -14,12 +14,12 @@ describe Hammer::Component::Base do
   end
 
   describe '#to_html' do
-    subject { FooComponent.new(context_mock).to_html }
+    subject { FooComponent.new(:context => context_mock).to_html }
     it { should match(/foo content/)}
 
     describe 'when passed' do
       subject do
-        component = Hammer::Component::Base.new(context_mock)
+        component = Hammer::Component::Base.new(:context => context_mock)
         component.instance_eval { pass_on new(FooComponent) }
         component.to_html
       end
@@ -29,7 +29,7 @@ describe Hammer::Component::Base do
 
   describe "#ask" do
     let :component do
-      component = Hammer::Component::Base.new(context_mock)
+      component = Hammer::Component::Base.new(:context => context_mock)
       @asked = component.instance_eval { ask(Hammer::Component::Base) {|answer| @answer = answer }}
       component
     end
@@ -48,7 +48,7 @@ describe Hammer::Component::Base do
   end
 
   describe '#widget', '#component' do
-    subject { @component = FooComponent.new(context_mock).widget.component;  }
+    subject { @component = FooComponent.new(:context => context_mock).widget.component;  }
     it { should == @component }
   end
 

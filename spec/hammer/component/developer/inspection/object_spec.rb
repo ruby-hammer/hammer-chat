@@ -8,7 +8,9 @@ describe Hammer::Component::Developer::Inspection::Object do
     @array = [1]
   end
 
-  let(:inspector) { Hammer::Component::Developer::Inspection::Object.new(nil, InspectTest) }
+  let(:inspector) do
+    Hammer::Component::Developer::Inspection::Object.new(:context => context_mock, :obj => InspectTest)
+  end
 
   subject { inspector }
 
@@ -19,6 +21,7 @@ describe Hammer::Component::Developer::Inspection::Object do
 
   describe '#components' do
     subject { inspector.components }
+    it { should_not be_nil }
     it { should be_empty }
     it { should be_kind_of(Array) }
   end
@@ -27,7 +30,7 @@ describe Hammer::Component::Developer::Inspection::Object do
     before do
       method = inspector.method(:unpack)
       inspector.should_receive(:unpack).and_return { method.call }
-      inspector.switch_packed
+      inspector.toggle!
     end
 
     it { inspector.instance_variable_get(:@packed).should == false }
@@ -37,7 +40,7 @@ describe Hammer::Component::Developer::Inspection::Object do
       before do
         method = inspector.method(:pack)
         inspector.should_receive(:pack).and_return { method.call }
-        inspector.switch_packed
+        inspector.toggle!
       end
 
       it { inspector.instance_variable_get(:@packed).should == true }

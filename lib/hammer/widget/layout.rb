@@ -1,42 +1,36 @@
 # encoding: UTF-8
 
-module Hammer
-  module Widget
+module Hammer::Widget
 
-    # Abstract layout for Hammer applications
-    class Layout < Erector::Widgets::Page
+  # Abstract layout for Hammer applications
+  class Layout < Erector::Widgets::Page
 
-      #      depends_on :js, 'js/swfobject.js', 'js/FABridge.js', 'js/web_socket.js'
-      external :js, 'js/jquery-1.4.2.js'
-      external :js, 'js/jquery.ba-hashchange.js'
-      external :js, 'js/hammer.js'
-      external :css,  'css/developer.css'
+    #      depends_on :js, 'js/swfobject.js', 'js/FABridge.js', 'js/web_socket.js'
+    external :js, 'js/jquery-1.4.2.js'
+    external :js, 'js/jquery.ba-hashchange.js'
+    external :js, 'js/hammer.js'
+    external :css,  'css/developer.css'
       
-      def body_content
-        loading
-        set_variables(@session_id)
-      end
+    def body_content
+      set_variables(@session_id)
+      loading
+    end
 
-      def head_content
-        super
-      end
+    # overwrite to change loading page
+    def loading
+      div(:class => 'loading') { img :src => 'img/loading.gif', :alt => "Loading..." }
+    end
 
-      def loading
-        div(:class => 'loading') { img :src => 'img/loading.gif', :alt => "Loading..." }
-      end
+    private
 
-      private
-
-      def set_variables(session_id)
-        javascript \
-            "hammer._setVariables({" +
-            "server: \"#{Config[:websocket][:server]}\"," +
-            "port: #{Config[:websocket][:port]}, " +
-            "sessionId: \"#{session_id}\"," +
-            "sendLogBack: #{Config[:js][:send_log_back]}});" #+
-        #            "window.WEB_SOCKET_SWF_LOCATION = \"js/WebSocketMain.swf\""
-      end
-
+    # sets configuration
+    def set_variables(session_id)
+      javascript("hammer._setVariables(%s);" % JSON[
+          :server => Hammer.config[:websocket][:server],
+          :port => Hammer.config[:websocket][:port],
+          :sessionId => session_id,
+          :sendLogBack => Hammer.config[:js][:send_log_back]
+        ])
     end
   end
 end

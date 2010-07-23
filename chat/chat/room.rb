@@ -1,14 +1,10 @@
 module Chat
   class Room < Hammer::Component::Base
 
+    needs :room, :user
     attr_reader :room, :user
-    def initialize(context, room, user)
-      @room, @user = room, user
-      super(context)
-    end
 
-    def initial_state
-      super
+    after_initialize do
       ask_message
 
       room.add_observer(:message, self, :new_message)
@@ -30,15 +26,16 @@ module Chat
 
     attr_reader :message_form
     def ask_message
-      @message_form = ask(Chat::MessageForm, Chat::Model::Message.new(user)) { |message|
+      @message_form = ask(Chat::MessageForm, :record => Chat::Model::Message.new(user)) { |message|
         room.add_message message
         ask_message
       }
     end
 
-    class Widget < Hammer::Widget::Component
+    class Widget < Hammer::Widget::Base
       require 'gravatarify'
       include Gravatarify::Helper
+      wrap_in :div
       
       def content
         h2 room.name

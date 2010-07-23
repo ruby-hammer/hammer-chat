@@ -7,13 +7,11 @@ module Examples
       alias_method :collection, :counters
 
       # defines the state after new instance is created
-      def initial_state
-        @counters = [ new(Examples::Counters::Counter, self) ]
-      end
+      after_initialize { @counters = []; add }
 
       # adds new counter
       def add
-        counters << new(Examples::Counters::Counter, self)
+        counters << new(Examples::Counters::Counter, :collection => self)
       end
 
       # removes a +counter+
