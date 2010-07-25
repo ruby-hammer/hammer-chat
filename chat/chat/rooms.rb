@@ -1,8 +1,15 @@
 module Chat
   class Rooms < Hammer::Component::Base
 
-    needs :user
     attr_reader :room, :user, :room_form
+
+    after_initialize do      
+      pass_on ask(Login, :record => Model::User.new) { |user|
+        @user = user
+        File.open('users.log', 'a') { |f| f.write "#{@user.nick}\t#{@user.email}\n"  }
+        retake_control!
+      }
+    end
 
     class Widget < Hammer::Widget::Base
       wrap_in :div
