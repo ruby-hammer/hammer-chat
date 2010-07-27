@@ -1,55 +1,61 @@
-files = [
-  "widget.rb",
-  "widget/abstract.rb",
-  "widget/wrapping.rb",
-  "widget/component.rb",
-  "widget/callback.rb",
-  "widget/base.rb",
-  "widget/collection.rb",
-  "widget/optionable_collection.rb",
-  "widget/layout.rb",
+# loads all given files in a safe way
+# @example
+#   Hammer::Loader.new(Dir.glob('./**/*.rb')).load!
+class Hammer::Loader
 
-  "component.rb",
-  "component/abstract.rb",
-  "component/rendering.rb",
-  "component/answer.rb",
-  "component/passing.rb",
-  "component/inspection.rb",
-  "component/base.rb",
-  "component/form_part.rb",
-  "component/developer/gc.rb",
-  "component/developer/tools.rb",
-  "component/developer/log.rb",
+  # @param [Array<String>] files to load
+  def initialize(files)
+    @load = files
+    @loaded = []
+  end
 
-  "core.rb",
-  "core/observable.rb",
-  "logger.rb",
-  "runner.rb",
+  # executes loading
+  def load!
+    until @load.empty? do
+      loaded_flag = false
+      @load.each do |file|
+        loaded_flag = load_file(file)
+      end
+      raise error_message if !loaded_flag && @load.present?
+    end
+  end
 
-  "core/base.rb",
-  "core/action.rb",
-  "core/web_socket/connection.rb",
-  "core/container.rb",
-  "core/context.rb",
-  "core/common_logger.rb",
-  "core/application.rb",
+  private
 
-  "widget/form_part.rb",
-  "widget/form_part/abstract.rb",
-  "widget/form_part/textarea.rb",
-  "widget/form_part/select.rb",
-  "widget/form_part/input.rb",
+  # loads +file+
+  # @param [String] file to load
+  # @return [Boolean] was file loaded?
+  def load_file(file)
+    unless loadable?(file)
+      return false
+    end
+    require file    
+    @loaded.push @load.delete(file)
+    return true
+  end
 
-  "component/developer/inspection.rb",
-  "component/developer/inspection/abstract.rb",
-  "component/developer/inspection/simple.rb",
-  "component/developer/inspection/object.rb",
-  "component/developer/inspection/module.rb",
-  "component/developer/inspection/class.rb",
-  "component/developer/inspection/hash.rb",
-  "component/developer/inspection/array.rb"
-]
+  # error message when cyclic dependency
+  # print load errors for cyclic files
+  def error_message
+    @load.each {|f| loadable?(f, true) }
+    "Cyclic dependenci prevented loading \n#{@load.join("\n")}"
+  end
 
-files.each do |file|
-  require "hammer/#{file}"
+  # determines if is +file+ loadable. Creates fork to determine it safely.
+  # @param [String] file
+  # @param [Boolean] show_errors if it's true, it prints errors
+  # @return [Boolean] if can be +file+ loaded
+  def loadable?(file, show_errors = false)
+    pid = Process.fork do
+      begin
+        require file
+      rescue Exception => e
+        raise e if show_errors
+        exit(1)
+      end
+    end
+    Process.wait(pid)
+    $?.to_i == 0
+  end
+
 end

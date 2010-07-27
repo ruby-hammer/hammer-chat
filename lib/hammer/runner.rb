@@ -20,7 +20,7 @@ module Hammer
       private
 
       def load_app_files
-        require "./loader.rb"
+        Hammer::Loader.new(Dir.glob('./**/*.rb')).load!
       end
 
       def setup_application

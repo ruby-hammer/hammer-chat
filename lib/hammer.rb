@@ -12,8 +12,8 @@ unless defined? Hammer
   require 'json/pure' # TODO require something faster
   require 'benchmark'
   require 'neverblock'
-  require 'hammer/config'
-  #  require 'weakref'
+
+  require 'hammer/config.rb'
 
   module Hammer
 
@@ -35,7 +35,10 @@ unless defined? Hammer
 
   end
 
-  require 'hammer/loader.rb'
+  require 'hammer/load.rb'
+
+  #  files = Dir.glob("#{File.expand_path(File.dirname(__FILE__))}/hammer/**/*.rb")
+  #  Hammer::Loader.new(files).load!
 
   # require 'datamapper'
   # require "#{Hammer.root}/lib/setup_db.rb"
