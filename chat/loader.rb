@@ -7,7 +7,6 @@ files = %w[
   chat/room.rb
   chat/rooms.rb
   chat/room_form.rb
-  chat/root.rb
   app_layout.rb
 ]
 
