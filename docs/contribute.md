@@ -11,6 +11,7 @@
 * Optimize for readability, not performance.
 
 Short example of correct formating
+
     class Foo
       def method(*args)
         pp "something really long" +
@@ -54,7 +55,7 @@ There are 3 Rake tasks:
 * `yard:regenerate` force to regenerate whole local documentation
 * `yard:gh-pages` generates documentation into subdirectory `gh-pages` where clone of branch `gh-pages` is expected.
   It's used to update online documentation on
-  [http://isy-pitr.github.com/isy-playground/](http://isy-pitr.github.com/isy-playground/)
+  [http://ruby-hammer.github.com/hammer/](http://ruby-hammer.github.com/hammer/)
 
 ## [Discussion](https://wave.google.com/wave/waveref/googlewave.com/w+7z-HD1_8D)
 
