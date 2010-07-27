@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-class AppLayout < Hammer::Widget::Layout
+class Examples::Layout < Hammer::Widget::Layout
 
   external :css, "css/basic.css"
 
