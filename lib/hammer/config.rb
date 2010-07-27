@@ -15,11 +15,11 @@ module Hammer
       def config
         @@config ||= begin c = Configliere.new({
               :web => {
-                :host => '0.0.0.0',
+                :host => '127.0.0.1',
                 :port => 3000
               },
               :websocket => {
-                :host => '0.0.0.0',
+                :host => '127.0.0.1',
                 :server => '127.0.0.1',
                 :port => 3001,
                 :debug => false,
@@ -33,6 +33,7 @@ module Hammer
                 :show_traffic => false,
                 :output => $stdout
               },
+              :erector => { :pretty => false },
               :core => { :devel => 'devel' }
             })
 
@@ -60,6 +61,7 @@ module Hammer
           c.define 'logger.level', :require => true, :type => Integer
           c.define 'logger.show_traffic', :require => true, :type => :boolean
           c.define 'logger.output', :require => true
+          c.define 'erector.pretty', :require => true, :type => :boolean
           c.define 'core.devel', :require => true, :type => String
           c.resolve!
   

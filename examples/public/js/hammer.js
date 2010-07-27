@@ -16,6 +16,7 @@ Hammer.prototype = {
     try {
       return func.call(obj);
     } catch (e) {
+      Hammer.Logger.error(e);
       Hammer.Logger.error(e.stack);
     }
   },
@@ -110,7 +111,7 @@ Hammer.prototype = {
   _send: function(obj) {
     var json = JSON.stringify(obj);
     Hammer.Logger.debug("sending: " + json);
-    this.websocket.send(json);
+    setTimeout(function() { hammer.websocket.send(json) }, 1);
   },
 
   _events: function() {

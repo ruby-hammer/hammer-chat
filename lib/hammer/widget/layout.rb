@@ -5,7 +5,10 @@ module Hammer::Widget
   # Abstract layout for Hammer applications
   class Layout < Erector::Widgets::Page
 
-    #      depends_on :js, 'js/swfobject.js', 'js/FABridge.js', 'js/web_socket.js'
+    external :js, 'js/swfobject.js'
+    external :js, 'js/FABridge.js'
+    external :js, 'js/web_socket.js'
+    #    external :js, 'js/pusher.js'
     external :js, 'js/jquery-1.4.2.js'
     external :js, 'js/jquery.ba-hashchange.js'
     external :js, 'js/hammer.js'
@@ -30,7 +33,8 @@ module Hammer::Widget
           :port => Hammer.config[:websocket][:port],
           :sessionId => session_id,
           :sendLogBack => Hammer.config[:js][:send_log_back]
-        ])
+        ] + "WEB_SOCKET_SWF_LOCATION = \"js/WebSocketMain.swf\"; WEB_SOCKET_DEBUG = true;" +
+            "WebSocket.__swfLocation = \"js/WebSocketMain.swf\"")
     end
   end
 end

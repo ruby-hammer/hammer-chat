@@ -3,6 +3,8 @@
 # Abstract class of all widgets
 class Hammer::Widget::Abstract < Erector::Widget
 
+  self.prettyprint_default = Hammer.config[:erector][:pretty]
+
   # try to obtain widget and render it with Erector::Widget#widget
   # @param [Erector::Widget, #widget] obj to render
   def render(obj)
