@@ -8,6 +8,14 @@ describe Hammer::Component::Developer::Inspection::Object do
     @array = [1]
   end
 
+  def subject
+    inspector
+  end
+
+  def self.subject(&block)
+    define_method :subject, &block
+  end
+
   let(:inspector) do
     Hammer::Component::Developer::Inspection::Object.new(:context => context_mock, :obj => InspectTest)
   end
@@ -16,15 +24,13 @@ describe Hammer::Component::Developer::Inspection::Object do
     Fiber.current.stub(:hammer_context).and_return context_mock
   end
 
-  subject { inspector }
-
   describe '#obj' do
-    subject { inspector.obj }
+    subject { super().obj }
     it { should eql(InspectTest) }
   end
 
   describe '#components' do
-    subject { inspector.components }
+    subject { super().components }
     it { should_not be_nil }
     it { should be_empty }
     it { should be_kind_of(Array) }
@@ -37,8 +43,8 @@ describe Hammer::Component::Developer::Inspection::Object do
       inspector.toggle!
     end
 
-    it { inspector.instance_variable_get(:@packed).should == false }
-    it { inspector.components.should_not be_empty }
+    it { subject.instance_variable_get(:@packed).should == false }
+    it { subject.components.should_not be_empty }
 
     describe 'when packed' do
       before do
@@ -47,32 +53,32 @@ describe Hammer::Component::Developer::Inspection::Object do
         inspector.toggle!
       end
 
-      it { inspector.instance_variable_get(:@packed).should == true }
-      it { inspector.components.should be_empty }
+      it { subject.instance_variable_get(:@packed).should == true }
+      it { subject.components.should be_empty }
     end
 
     describe '#components' do
-      subject { inspector.components }
+      subject { super().components }
       
       it { should_not be_empty }
       it { should be_kind_of(Array) }
       it { should have(1).items }
 
       describe '#first' do
-        subject { inspector.components.first }
+        subject { super().first }
         it { should be_kind_of(Hammer::Component::Developer::Inspection::Hash) }
 
         describe '#label' do
-          subject { inspector.components.first.label }
+          subject { super().label }
           it { should == 'Instance variables' }
         end
 
         describe '#obj' do
-          subject { inspector.components.first.obj }
+          subject { super().obj }
           it { should be_kind_of ::Hash }
 
           describe '#keys' do
-            subject { inspector.components.first.obj.keys }
+            subject { super().keys }
             it { should include(:@array) }
           end
         end
