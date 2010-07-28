@@ -4,23 +4,23 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 require 'benchmark'
 
-describe Hammer::Widget::Callback::Callback do
+describe Hammer::Widget::Callback do
   include HammerMocks
 
-  let(:callback) { Hammer::Widget::Callback::Callback.new(mock(:widget)) }
+  let(:widget) { Hammer::Widget::Base.new(:component => component_mock) }
 
   describe '#simple_json' do
-    it { callback.send(:simple_json, :action => "asd").should == '{"action":"asd"}' }
-    it { callback.send(:simple_json, :form => 12).should == '{"form":12}' }
-    it { callback.send(:simple_json, :action => "asd", :form => 12).should == '{"action":"asd","form":12}' }
+    it { widget.send(:simple_json, :action => "asd").should == '{"action":"asd"}' }
+    it { widget.send(:simple_json, :form => 12).should == '{"form":12}' }
+    it { widget.send(:simple_json, :action => "asd", :form => 12).should == '{"action":"asd","form":12}' }
   end
 
-  describe '#flush!' do
+  describe 'output' do
     before { context_mock.stub(:register_action).and_return('id') }
     subject do
       @widget = Hammer::Widget::Base.new(:component => component_mock) do |w|
-        w.a "label", :class => 'a', :callback => on(:click) {}
-        w.span(:class => 'b', :callback => on(:click, 123)) { w.text 'content'}
+        w.a "label", :class => 'a', :callback => w.on(:click) {}
+        w.span(:class => 'b', :callback => w.on(:click, 123)) { w.text 'content'}
       end
       @widget.to_html
     end
