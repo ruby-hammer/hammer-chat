@@ -40,7 +40,7 @@ module Hammer::Core
     # @return [Class] class of a root component
     def root_class
       @root_class ||= unless @hash == config[:core][:devel]
-        config[:root_class].to_s.constantize
+        config[:root].to_s.constantize
       else
         Hammer::Component::Developer::Tools
       end

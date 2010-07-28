@@ -28,8 +28,7 @@ module Hammer::Widget
       javascript("hammer._setVariables(%s);" % JSON[
           :server => Hammer.config[:websocket][:server],
           :port => Hammer.config[:websocket][:port],
-          :sessionId => session_id,
-          :sendLogBack => Hammer.config[:js][:send_log_back]
+          :sessionId => session_id
         ])
     end
   end

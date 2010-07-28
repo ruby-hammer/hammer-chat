@@ -23,7 +23,7 @@ module Hammer::Core
       run_websocket_server
     end
 
-    @fibers_pool = Hammer::Core::FiberPool.new config[:websocket][:fibers]
+    @fibers_pool = Hammer::Core::FiberPool.new config[:core][:fibers]
 
     # @return [Hammer::Core::FiberPool]
     def self.fibers_pool

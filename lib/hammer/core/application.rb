@@ -26,7 +26,7 @@ module Hammer::Core
     end
 
     get '/' do
-      config[:layout_class].to_s.constantize.new(:session_id => session_id).to_html
+      config[:layout].to_s.constantize.new(:session_id => session_id).to_html
     end
 
     # monkey patch sintra .run!

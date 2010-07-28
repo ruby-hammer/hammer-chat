@@ -49,6 +49,14 @@ a basic implementation. It does not have any persistent backend, messages are li
 dropped from memory after 4 hours of inactivity. You can login in each window as different person, nick and email
 for gravatar is required.
 
+### Configuration
+
+Type
+
+    hammer --help
+
+to see available options. Options can be set on commandline or in `./confg.yml`.
+
 ## {file:docs/contribute How to Contribute}
 
 ## Discussions

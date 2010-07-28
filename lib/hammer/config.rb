@@ -13,59 +13,45 @@ module Hammer
 
     module ClassMethods
       def config
-        @@config ||= begin c = Configliere.new({
-              :web => {
-                :host => '0.0.0.0',
-                :port => 3000
-              },
-              :websocket => {
-                :host => '0.0.0.0',
-                :server => '127.0.0.1',
-                :port => 3001,
-                :debug => false,
-                :fibers => 10,
-              },
-              :layout_class => 'Hammer::Widget::Layout',
-              :environment => :development,
-              :js => { :send_log_back => false },
-              :logger => {
-                :level => 0,
-                :show_traffic => false,
-                :output => $stdout
-              },
-              :core => { :devel => 'devel' }
-            })
+        @@config ||= begin Configliere.new.instance_eval do
+            use :define, :config_file, :commandline
 
-          c.use :env_var
-          c.env_vars :environment => ENV['RACK_ENV']
-          c.resolve!
-    
-          c.use :config_file
-          c.read './config.yml'
-          c.resolve!
+            [
 
-          c.use :define
-          c.define 'web.host', :require => true, :type => String
-          c.define 'web.port', :require => true, :type => Integer
-          c.define 'websocket.host', :require => true, :type => String
-          c.define 'websocket.server', :require => true, :type => String
-          c.define 'websocket.port', :require => true, :type => Integer
-          c.define 'websocket.debug', :require => true, :type => :boolean
-          c.define 'websocket.fibers', :require => true, :type => Integer
-          c.define 'root_class', :require => true, :type => String
-          c.define 'layout_class', :require => true, :type => String,
-              :description => "Name of a layout class."
-          c.define 'environment', :require => true, :type => Symbol
-          c.define 'js.send_log_back', :require => true, :type => :boolean
-          c.define 'logger.level', :require => true, :type => Integer
-          c.define 'logger.show_traffic', :require => true, :type => :boolean
-          c.define 'logger.output', :require => true
-          c.define 'core.devel', :require => true, :type => String
-          c.resolve!
-  
-          c.use :commandline
-          c.resolve!
-          c
+              # name                    type      default       description
+              [ 'web.host',             String,   '127.0.0.1',  "web-server's device to bind" ],
+              [ 'web.port',             Integer,  3000,         "web-server's port" ],
+
+              [ 'websocket.host',       String,   '127.0.0.1',  "websocket-server's device to bind" ],
+              [ 'websocket.server',     String,   '127.0.0.1',  "websocket-server's address for clients" ],
+              [ 'websocket.port',       Integer,  3001,         "websocket-server's port" ],
+              [ 'websocket.debug',      :boolean, false,        "show raw websocket's communication?" ],
+
+              [ 'core.devel',           String,   'devel',      "hash address of devel tools" ],
+              [ 'core.fibers',          Integer,  20,           "size of fiberpool" ],
+
+              [ 'logger.level',         Integer,  0,            "logger level" ],
+              [ 'logger.show_traffic',  :boolean, false,        "show server-client formated communication" ],
+              [ 'logger.output',        nil,      $stdout,      "log's file name" ],
+
+              [ :root,                  String,   nil,          "name of a root component's class" ],
+              [ :layout,                String,   nil,          "name of a layout's class" ],
+              [ :environment,           Symbol,   :development, "environment", 'RACK_ENV' ]
+
+
+            ].each do |key, type, default, description, env_var|
+              options = { :description => description }
+              options[:type] = type if type
+              options[:default] = default unless default.nil?
+              options[:env_var] = env_var if env_var
+
+              define key, options
+            end
+            resolve!
+            read './config.yml'
+            resolve!
+            self
+          end
         end
       end
     end
