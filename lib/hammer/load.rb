@@ -26,6 +26,7 @@ require "hammer/logger.rb"
 require "hammer/runner.rb"
 require "hammer/loader.rb"
 
+require "hammer/core/fiber_pool.rb"
 require "hammer/core/base.rb"
 require "hammer/core/action.rb"
 require "hammer/core/web_socket/connection.rb"

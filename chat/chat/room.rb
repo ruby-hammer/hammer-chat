@@ -17,7 +17,7 @@ module Chat
     end
 
     def new_message
-      context.schedule { context.actualize.send! }
+      context.actualize.send!
     end
 
     def context_dropped(context)
@@ -26,10 +26,10 @@ module Chat
 
     attr_reader :message_form
     def ask_message
-      @message_form = ask(Chat::MessageForm, :record => Chat::Model::Message.new(user)) { |message|
+      @message_form = ask Chat::MessageForm.new(:record => Chat::Model::Message.new(user)) do |message|
         room.add_message message
         ask_message
-      }
+      end
     end
 
     class Widget < Hammer::Widget::Base

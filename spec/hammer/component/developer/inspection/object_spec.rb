@@ -12,6 +12,10 @@ describe Hammer::Component::Developer::Inspection::Object do
     Hammer::Component::Developer::Inspection::Object.new(:context => context_mock, :obj => InspectTest)
   end
 
+  before do
+    Fiber.current.stub(:hammer_context).and_return context_mock
+  end
+
   subject { inspector }
 
   describe '#obj' do

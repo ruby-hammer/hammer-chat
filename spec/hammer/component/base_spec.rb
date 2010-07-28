@@ -13,6 +13,10 @@ describe Hammer::Component::Base do
     end
   end
 
+  describe '.new' do
+    it { lambda {FooComponent.new}.should raise_error }
+  end
+
   describe '#to_html' do
     subject { FooComponent.new(:context => context_mock).to_html }
     it { should match(/foo content/)}
@@ -20,7 +24,7 @@ describe Hammer::Component::Base do
     describe 'when passed' do
       subject do
         component = Hammer::Component::Base.new(:context => context_mock)
-        component.instance_eval { pass_on new(FooComponent) }
+        component.instance_eval { pass_on FooComponent.new(:context => context) }
         component.to_html
       end
       it { should match(/foo content/)}
@@ -30,7 +34,9 @@ describe Hammer::Component::Base do
   describe "#ask" do
     let :component do
       component = Hammer::Component::Base.new(:context => context_mock)
-      @asked = component.instance_eval { ask(Hammer::Component::Base) {|answer| @answer = answer }}
+      @asked = component.instance_eval do
+        ask(Hammer::Component::Base.new(:context => context)) {|answer| @answer = answer }
+      end
       component
     end
 

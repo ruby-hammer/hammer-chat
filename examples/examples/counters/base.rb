@@ -11,7 +11,7 @@ module Examples
 
       # adds new counter
       def add
-        counters << new(Examples::Counters::Counter, :collection => self)
+        counters << Examples::Counters::Counter.new(:collection => self)
       end
 
       # removes a +counter+

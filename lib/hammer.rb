@@ -1,8 +1,7 @@
 # encoding: UTF-8
 
 unless defined? Hammer
-  require 'pp'
-  #  require 'uuid'
+  # gems
   require 'active_support/core_ext'
   require 'active_support/basic_object'
   require 'erector'
@@ -10,9 +9,13 @@ unless defined? Hammer
   require 'em-websocket'
   require 'configliere'
   require 'json/pure' # TODO require something faster
-  require 'benchmark'
-  require 'neverblock'
 
+  # stdlib
+  require 'pp'
+  require 'fiber'
+  require 'benchmark'
+
+  # hammer
   require 'hammer/config.rb'
 
   module Hammer

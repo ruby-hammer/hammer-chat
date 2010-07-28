@@ -24,12 +24,11 @@ module Hammer::Component
       super
     end
 
-    # {Base} factory method, it adds proper {Core::Context} automatically
+    # adds proper {Core::Context} automatically
     # @param [Hash] assigns are passed to +klass+.new
-    # @param [Class] klass which is used to create new {Base} instance
-    def new(klass, assigns = {})
-      check_assigns(assigns)
-      klass.send :new, assigns.merge({:context => context})
+    def self.new(assigns = {})
+      assigns[:context] ||= get_context
+      super assigns
     end
 
     private
@@ -38,6 +37,11 @@ module Hammer::Component
       unless assigns.kind_of? Hash
         raise "assigns is not a Hash: #{assigns.inspect}"
       end
+    end
+
+    def self.get_context
+      raise('trying to create outside Fiber') unless Fiber.current.respond_to? :hammer_context
+      Fiber.current.hammer_context || raise('unset context in fiber')
     end
 
   end

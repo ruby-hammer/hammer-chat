@@ -49,7 +49,6 @@ begin
     #    gem.homepage = "http://isy-pitr.github.com/isy-playground"
     gem.authors = ["Petr Chalupa"]
 
-    gem.add_dependency 'uuid', ">= 0"
     gem.add_dependency 'tzinfo', '>= 0'
     gem.add_dependency 'i18n', '>= 0'
     gem.add_dependency 'activesupport', '>= 3.0.0.beta'
@@ -58,7 +57,6 @@ begin
     gem.add_dependency 'thin', ">= 0"
     gem.add_dependency 'em-websocket', ">= 0"
     gem.add_dependency 'configliere', ">= 0"
-    gem.add_dependency 'neverblock', ">= 0"
     gem.add_dependency 'bundler', ">= 0"
 
     gem.add_development_dependency "rspec", ">= 2.0.0.beta"

@@ -14,10 +14,11 @@ module Hammer::Core
     # @param [String] id unique identification
     def initialize(id, container, hash = '')
       @id, @container, @hash = id, container, hash
-      @root_component = root_class.send :new, :context => self
       @queue, @message = [], {}
       self.class.no_connection_contexts << self
       clear_actions
+
+      schedule { @root_component = root_class.new }
     end
 
     # store connection to be able to send server-side actualizations
@@ -111,20 +112,6 @@ module Hammer::Core
       contexts_by_connection[connection]
     end
 
-    # processes safely block, restarts context when error occurred
-    # @yield task to execute
-    # @param [Boolean] restart try to restart when error?
-    def safely(restart = true, &block)
-      unless Base.safely(&block)
-        if restart
-          container.restart_context id, hash, connection,
-              "We are sorry but there was a error. Application is reloaded"
-        else
-          warn("Fatal error").send!
-        end
-      end
-    end
-
     # @param [String] warn which will be shown to user using alert();
     # @return self
     def warn(warn)
@@ -153,6 +140,27 @@ module Hammer::Core
 
     private
 
+    # processes safely block, restarts context when error occurred
+    # @yield task to execute
+    # @param [Boolean] restart try to restart when error?
+    def safely(restart = true, &block)
+      unless Base.safely(&block)
+        if restart
+          container.restart_context id, hash, connection,
+              "We are sorry but there was a error. Application is reloaded"
+        else
+          warn("Fatal error").send!
+        end
+      end
+    end
+
+    # sets context to fiber
+    def with_context(&block)
+      Fiber.current.hammer_context = self
+      block.call
+      Fiber.current.hammer_context = nil
+    end
+
     # @return [Hash] current message stored to {#send!}
     # @param [Hash] hash to be merged into current message
     def message(hash = {})
@@ -169,7 +177,9 @@ module Hammer::Core
     def schedule_next(restart = true)
       if block = @queue.shift
         @running = block
-        Base.fibers_pool.spawn { safely(restart) { block.call; schedule_next } }
+        Base.fibers_pool.spawn do
+          with_context { safely(restart) { block.call; schedule_next } }
+        end
       else
         @running = nil
       end

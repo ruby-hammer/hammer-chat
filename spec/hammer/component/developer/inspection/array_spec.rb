@@ -11,6 +11,10 @@ describe Hammer::Component::Developer::Inspection::Array do
     self.class.array
   end
 
+  before do
+    Fiber.current.stub(:hammer_context).and_return context_mock
+  end
+
   let(:inspector) { Hammer::Component::Developer::Inspection::Array.new(:context => context_mock, :obj => array) }
   subject { inspector }
 

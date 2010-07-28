@@ -14,17 +14,13 @@ module Hammer::Core::Observable
 
   # adds observer to listening to event
   # @param [Symbol] event to observe
-  # @param [Object] observer
+  # @param [Hammer::Component::Base] observer
   # @param [Symbol] method to call on observer
-  # @return [Object] observer
-  def add_observer(event, observer = nil, method = :update, &block)
+  # @return [Hammer::Component::Base] observer
+  def add_observer(event, observer, method = :update, &block)
     raise ArgumentError unless self.class.observable_events.include? event
-    if block
-      observer, method = block, :call
-    else
-      raise NoMethodError, "observer does not respond to `#{method.to_s}'" unless observer.respond_to? method
-    end    
-    _observers(event)[observer] = method
+    raise NoMethodError, "observer does not respond to `#{method.to_s}'" unless block || observer.respond_to?(method)
+    _observers(event)[observer] = block || method
     observer
   end
 
@@ -36,8 +32,16 @@ module Hammer::Core::Observable
   end
 
   # @param [Symbol] event to observe
-  def notify_observers(event, *arg)    
-    _observers(event).each {|observer, method| observer.send method, *arg }
+  def notify_observers(event, *args)
+    _observers(event).each do |observer, method|
+      observer.context.schedule do
+        if method.is_a?(Symbol)
+          observer.send method, *args
+        else
+          method.call *args
+        end
+      end
+    end
   end
 
   def count_observers(event)

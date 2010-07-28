@@ -15,17 +15,13 @@ module Hammer
           Hammer.logger.add_observer(:message, self, :new_message)
 
           # listen context for :drop event then delete observer to collect by GC
-          context.add_observer(:drop) { Hammer.logger.delete_observer :message, self }
+          context.add_observer(:drop, self) { Hammer.logger.delete_observer :message, self }
         end
 
         def new_message(message)
-          Hammer.logger.silence(5) do # we don't want to end up in infinite loop
-            context.schedule do
-              Hammer.logger.silence(5) do
-                add_message(message)
-                context.actualize.send!
-              end
-            end
+          Hammer.logger.silence(5) do
+            add_message(message)
+            context.actualize.send!
           end
         end
 

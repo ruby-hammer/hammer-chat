@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Petr Chalupa"]
-  s.date = %q{2010-07-25}
+  s.date = %q{2010-07-28}
   s.description = %q{ruby component based state-full web framework}
   s.email = %q{hammer.framework@gmail.com}
   s.executables = ["hammer-memprof", "hammer-prof", "hammer"]
@@ -18,13 +18,11 @@ Gem::Specification.new do |s|
      "README.md",
      "README_FULL.md",
      "docs/contribute.md",
-     "docs/discussion.md",
-     "docs/name.md",
      "docs/wave.md"
   ]
   s.files = [
-    "examples/app_layout.rb",
-     "examples/config.yml",
+    "examples/config.yml",
+     "examples/examples/app_layout.rb",
      "examples/examples/ask/base.rb",
      "examples/examples/ask/counter.rb",
      "examples/examples/base.rb",
@@ -32,7 +30,6 @@ Gem::Specification.new do |s|
      "examples/examples/counters/base.rb",
      "examples/examples/counters/counter.rb",
      "examples/examples/form/base.rb",
-     "examples/loader.rb",
      "examples/public/css/basic.css",
      "examples/public/css/chat.css",
      "examples/public/css/developer.css",
@@ -94,8 +91,10 @@ Gem::Specification.new do |s|
      "lib/hammer/core/common_logger.rb",
      "lib/hammer/core/container.rb",
      "lib/hammer/core/context.rb",
+     "lib/hammer/core/fiber_pool.rb",
      "lib/hammer/core/observable.rb",
      "lib/hammer/core/web_socket/connection.rb",
+     "lib/hammer/load.rb",
      "lib/hammer/loader.rb",
      "lib/hammer/logger.rb",
      "lib/hammer/runner.rb",
@@ -122,6 +121,7 @@ Gem::Specification.new do |s|
     "spec/hammer/widget/callback_spec.rb",
      "spec/hammer/widget/base_spec.rb",
      "spec/hammer/widget/component_spec.rb",
+     "spec/hammer/loader_spec.rb",
      "spec/hammer/component/form_part_spec.rb",
      "spec/hammer/component/developer/inspection/array_spec.rb",
      "spec/hammer/component/developer/inspection/object_spec.rb",
@@ -140,7 +140,6 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<uuid>, [">= 0"])
       s.add_runtime_dependency(%q<tzinfo>, [">= 0"])
       s.add_runtime_dependency(%q<i18n>, [">= 0"])
       s.add_runtime_dependency(%q<activesupport>, [">= 3.0.0.beta"])
@@ -149,7 +148,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<thin>, [">= 0"])
       s.add_runtime_dependency(%q<em-websocket>, [">= 0"])
       s.add_runtime_dependency(%q<configliere>, [">= 0"])
-      s.add_runtime_dependency(%q<neverblock>, [">= 0"])
       s.add_runtime_dependency(%q<bundler>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 2.0.0.beta"])
       s.add_development_dependency(%q<yard>, [">= 0"])
@@ -157,7 +155,6 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<rack-test>, [">= 0"])
     else
-      s.add_dependency(%q<uuid>, [">= 0"])
       s.add_dependency(%q<tzinfo>, [">= 0"])
       s.add_dependency(%q<i18n>, [">= 0"])
       s.add_dependency(%q<activesupport>, [">= 3.0.0.beta"])
@@ -166,7 +163,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<thin>, [">= 0"])
       s.add_dependency(%q<em-websocket>, [">= 0"])
       s.add_dependency(%q<configliere>, [">= 0"])
-      s.add_dependency(%q<neverblock>, [">= 0"])
       s.add_dependency(%q<bundler>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 2.0.0.beta"])
       s.add_dependency(%q<yard>, [">= 0"])
@@ -175,7 +171,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rack-test>, [">= 0"])
     end
   else
-    s.add_dependency(%q<uuid>, [">= 0"])
     s.add_dependency(%q<tzinfo>, [">= 0"])
     s.add_dependency(%q<i18n>, [">= 0"])
     s.add_dependency(%q<activesupport>, [">= 3.0.0.beta"])
@@ -184,7 +179,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<thin>, [">= 0"])
     s.add_dependency(%q<em-websocket>, [">= 0"])
     s.add_dependency(%q<configliere>, [">= 0"])
-    s.add_dependency(%q<neverblock>, [">= 0"])
     s.add_dependency(%q<bundler>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 2.0.0.beta"])
     s.add_dependency(%q<yard>, [">= 0"])
