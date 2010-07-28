@@ -21,7 +21,7 @@ module Examples
 
       class Widget < Hammer::Widget::Collection
         def after
-          cb.a('Add counter').event(:click).action! { add }
+          a 'Add counter', :callback => on(:click) { add }
         end
       end
 

@@ -13,7 +13,7 @@ module Examples
 
         # here we overwrite actions and to add Remove link
         def actions
-          cb.a('Remove').event(:click).action! { @collection.remove(self) }
+          a 'Remove', :callback => on(:click) { @collection.remove(self) }
         end
       end
     end

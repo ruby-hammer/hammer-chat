@@ -25,7 +25,7 @@ module Examples
             widget Hammer::Widget::FormPart::Textarea, :value => :description
           end
 
-          cb.a("Send for the #{counter}th time").event(:click).form.action! { @counter += 1 }
+          a "Send for the #{counter}th time", :callback => on(:click, component.form) { @counter += 1 }
 
           h4 'Values:'
           ul do

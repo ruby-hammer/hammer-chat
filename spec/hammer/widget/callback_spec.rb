@@ -19,8 +19,8 @@ describe Hammer::Widget::Callback::Callback do
     before { context_mock.stub(:register_action).and_return('id') }
     subject do
       @widget = Hammer::Widget::Base.new(:component => component_mock) do |w|
-        w.cb.a("label", :class => 'a').event(:click).action! {}
-        w.cb.span(:class => 'b') { w.text 'content'}.event(:click).form!(123)
+        w.a "label", :class => 'a', :callback => on(:click) {}
+        w.span(:class => 'b', :callback => on(:click, 123)) { w.text 'content'}
       end
       @widget.to_html
     end

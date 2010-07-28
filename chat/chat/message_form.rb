@@ -7,7 +7,7 @@ module Chat
       wrap_in :div
       
       def content
-        cb.a("Send").event(:click).form.action! {
+        a "Send", :callback => on(:click, component.form) {
             if message.valid?
               message.time!
               answer!(message)

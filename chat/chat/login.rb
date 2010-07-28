@@ -17,7 +17,7 @@ module Chat
           text 'Email:'
           widget Hammer::Widget::FormPart::Input, :value => :email, :options =>
               { :class => %w[ui-widget-content ui-corner-all] }
-          cb.a("Log in").event(:click).form.action! { answer!(user) if user.valid? }
+          a "Log in", :callback => on(:click, component.form) { answer!(user) if user.valid? }
         end
       end
     end

@@ -8,12 +8,12 @@ module Chat
       def content
         widget Hammer::Widget::FormPart::Input, :value => :name, :options =>
             { :class => %w[ui-widget-content ui-corner-all] }
-        cb.a("Add").event(:click).form.action! {
+        a "Add", :callback => on(:click, component.form) {
             if room.valid?
               answer!(room)
             end
           }
-        cb.a("Cansel").event(:click).action! { answer!(nil) }
+        a "Cansel", :callback => on(:click) { answer!(nil) }
       end
     end
 

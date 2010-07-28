@@ -36,6 +36,7 @@ module Hammer::Component::Answer
   # @param [Object] answer passed to stored block
   # @see #ask
   def answer!(answer = nil)
+    raise 'not answering' unless answering?
     @asker.instance_exec answer, &@askers_callback
   end
   

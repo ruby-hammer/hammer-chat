@@ -8,12 +8,12 @@ module Examples
       def content
         strong 'Examples:'
         ul do
-          li { cb.a("Counters").event(:click).action! { @example = new Examples::Counters::Base } }
-          li { cb.a("#ask").event(:click).action! { @example = new Examples::Ask::Base } }
-          li { cb.a("form").event(:click).action! { 
+          li { a "Counters", :callback => on(:click) { @example = new Examples::Counters::Base } }
+          li { a "#ask", :callback => on(:click) { @example = new Examples::Ask::Base } }
+          li { a "form", :callback => on(:click) {
               @example = new Examples::Form::Base, :record => Struct.new("Data", :name, :sex, :description).new
             } }
-          li { cb.a("none").event(:click).action! { @example = nil } }
+          li { a "none", :callback => on(:click) { @example = nil } }
         end
         hr
 

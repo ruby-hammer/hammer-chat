@@ -1,91 +1,52 @@
+# adds capability to generate callback on tags
 module Hammer::Widget::Callback
 
-  # enters scope for callback definition
-  # @example onclick on element span executes action block
-  #   cb.span('new room').event(:click).action! { a_action }
-  def callback
-    @callback ||= Callback.new(self)
+  # @param [Symbol] event jQuery event like :click, :change, etc.
+  # @param [Object] form_id to actualize on +event+. It can be an object where its #object_id is used or id
+  # @yield block action to be executed on +event+
+  # @example a action callback
+  #   a "Log", :callback => on(:click) { @tool = new Hammer::Component::Developer::Log }
+  # @example a form actualization
+  #   a "Send", :callback => on(:click, a_form_id)
+  def on(event, form_id = nil, &block)
+    hash = {}
+    hash[:action] = register_action &block if block
+    hash[:form] = form_id.is_a?(Fixnum) ? form_id : form_id.object_id if form_id
+    [ event, hash ]
   end
 
-  alias_method :cb, :callback
+  protected
 
-  # scope for callback definition
-  class Callback
-    def initialize(widget)
-      @widget, @events = widget, []
+  # catches callbacks
+  def __element__(raw, tag_name, *args, &block)
+    if (attributes = args.last.is_a?(Hash) ? args.last : nil) && attributes[:callback]
+      format_callbacks!(attributes)
     end
-
-    # sores by method element which will be rendered later with callbacks
-    # @param args for element
-    def method_missing(method, *args, &block)
-      raise "invalid state, flush first #{self.inspect}" if @tag
-      @tag, @block  = method, block
-      @options = args.extract_options!
-      @args = args
-      self
-    end
-
-    # on which event will be callback triggered
-    # @param [Symbol] event
-    def event(event) # TODO args for events like keypress
-      @events << event
-      self
-    end
-
-    # @yield block action to be executed
-    def action(&block)
-      raise "invalid state, flush first #{self.inspect}" if @action
-      @action = block
-      self
-    end
-
-    # form callback
-    # @param [Object, Fixnum] id a Fixnum or a Object where its #object_id is called to get form's id
-    def form(id = @widget.component)
-      raise "invalid state, flush first #{self.inspect}" if @form
-      id = id.object_id unless id.is_a? Fixnum
-      @form = id
-      self
-    end
-
-    # calls {#action} and {#flush!}
-    def action!(&block)
-      action(&block)
-      flush!
-    end
-
-    # calls {#form} and {#flush!}
-    def form!(id)
-      form(id)
-      flush!
-    end
-
-    # renders element defined in {#method_missing}, adds callback on {#event}
-    def flush!
-      hash = {}
-      hash[:action] = @widget.__send__ :register_action, &@action if @action
-      hash[:form] = @form if @form
-      # json = JSON[ hash ]
-      json = simple_json(hash)
-
-      @options.merge!( @events.inject({}) {|hash, e| hash[:"data-callback-#{e}"] = json; hash } )
-      @widget.__send__ @tag, *@args.push(@options), &@block
-      @tag = @action = @form = @block = @options = @args = nil
-      @events = []
-      nil
-    end
-
-    private
-
-    # transforms Hash to JSON
-    # @param [Hash] hash one-level hash with primitive types
-    def simple_json(hash)
-      str = hash.inject('{') {|str, pair| str << pair[0].to_s.inspect << ':' << pair[1].inspect << "," }
-      str[-1] = '}'
-      str
-    end
-
+    super(raw, tag_name, *args, &block)
   end
 
+  # catches callbacks
+  def __empty_element__(tag_name, attributes={})
+    if attributes[:callback]
+      format_callbacks!(attributes)
+    end
+    super(tag_name, attributes)
+  end
+
+  private
+
+  # formats callback in attributes for an element
+  def format_callbacks!(attributes)
+    event, hash = attributes.delete(:callback)
+    attributes.merge! :"data-callback-#{event}" => simple_json(hash)
+  end
+
+  # transforms Hash to JSON
+  # @param [Hash] hash one-level hash with primitive types
+  def simple_json(hash)
+    str = hash.inject('{') {|str, pair| str << pair[0].to_s.inspect << ':' << pair[1].inspect << "," }
+    str[-1] = '}'
+    str
+  end
 
 end

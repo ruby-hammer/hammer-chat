@@ -5,7 +5,7 @@ module Hammer
       needs :record, :form => nil
       attr_reader :form, :record
 
-      after_initialize { @form ||= self}
+      after_initialize { @form ||= self }
 
       # values from form's tags are stored here. They are automatically updated when :form callback is triggered
       # @return [Object] value for +key+

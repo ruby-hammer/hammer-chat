@@ -29,7 +29,7 @@ module Hammer::Component::Developer
         h1 'GC'
         ul do
           li do
-            cb.a("GC::Profiler.enable? => #{GC::Profiler.enabled?}").event(:click).action! {
+            a "GC::Profiler.enable? => #{GC::Profiler.enabled?}", :callback => on(:click) {
               if GC::Profiler.enabled?
                 GC::Profiler.disable
                 GC::Profiler.clear
@@ -38,7 +38,7 @@ module Hammer::Component::Developer
               end
             }
           end if Hammer.v19?
-          li { cb.a("GC.start").event(:click).action! { ObjectSpace.garbage_collect; ObjectSpace.garbage_collect }}
+          li { a "GC.start", :callback => on(:click) { ObjectSpace.garbage_collect; ObjectSpace.garbage_collect }}
         end
 
         pre { code GC::Profiler.result } if Hammer.v19?

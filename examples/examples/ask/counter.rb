@@ -9,8 +9,8 @@ module Examples
         # to answer nothing.
         # Everything else is as we need.
         def actions
-          cb.a('Add number').event(:click).action! { answer!(counter) }
-          cb.a('Cancel').event(:click).action! { answer! }
+          a 'Add number', :callback => on(:click) { answer!(counter) }
+          a 'Cancel', :callback => on(:click) { answer! }
         end
       end
     end
