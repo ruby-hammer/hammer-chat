@@ -2,7 +2,7 @@
 module Hammer::Widget::Callback
 
   # @param [Symbol] event jQuery event like :click, :change, etc.
-  # @param [Object] form_id to actualize on +event+. It can be an object where its #object_id is used or id
+  # @param [Object] form_id to update on +event+. It can be an object where its #object_id is used or id
   # @yield block action to be executed on +event+
   # @example a action callback
   #   a "Log", :callback => on(:click) { @tool = new Hammer::Component::Developer::Log }

@@ -52,7 +52,7 @@ describe Hammer::Core::Context do
     end
   end
 
-  describe '#actualize' do
+  describe '#update' do
     class AComponent < Hammer::Component::Base
       class Widget < Hammer::Widget::Base
         def content
@@ -64,7 +64,7 @@ describe Hammer::Core::Context do
     before do
       allocated_context.should_receive(:root_class).and_return(AComponent)
       context.connection = mock(:connection)
-      context.actualize
+      context.update
     end
     subject { context.instance_variable_get(:@message)[:html] }
 
@@ -131,8 +131,8 @@ describe Hammer::Core::Context do
   describe '#update_form' do
     before do
       form_part = mock(:form_part)
-      form_part.should_recieve.(:set_value).with(:name, 'name')
-      form_part.should_recieve.(:set_value).with(:value, 'value')
+      form_part.should_recieve(:set_value).with(:name, 'name')
+      form_part.should_recieve(:set_value).with(:value, 'value')
       context.update_form(:id => form_part.object_id, :name => 'name', :value => 'value')
     end
   end

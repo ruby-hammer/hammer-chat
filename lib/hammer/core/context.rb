@@ -50,8 +50,8 @@ module Hammer::Core
       root_class == Hammer::Component::Developer::Tools ? config[:core][:devel] : ''
     end
 
-    # renders actualization for the user and stores it in {#message}
-    def actualize
+    # renders update for the user and stores it in {#message}
+    def update
       Hammer.benchmark('Actualization') do
         #          RubyProf.resume do
         message :html => self.to_html

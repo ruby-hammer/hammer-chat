@@ -17,7 +17,7 @@ module Chat
     end
 
     def new_message
-      context.actualize.send!
+      context.update.send!
     end
 
     def context_dropped(context)

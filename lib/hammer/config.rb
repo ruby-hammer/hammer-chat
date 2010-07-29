@@ -35,7 +35,7 @@ module Hammer
               [ 'logger.output',        nil,      $stdout,      "log's file name" ],
 
               [ :root,                  String,   nil,          "name of a root component's class" ],
-              [ :layout,                String,   nil,          "name of a layout's class" ],
+              [ :layout,                String,   "Hammer::Widget::Layout", "name of a layout's class" ],
               [ :environment,           Symbol,   :development, "environment", 'RACK_ENV' ]
 
 
@@ -47,7 +47,7 @@ module Hammer
 
               define key, options
             end
-            resolve!
+
             read './config.yml'
             resolve!
             self

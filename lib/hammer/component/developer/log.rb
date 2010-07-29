@@ -21,7 +21,7 @@ module Hammer
         def new_message(message)
           Hammer.logger.silence(5) do
             add_message(message)
-            context.actualize.send!
+            context.update.send!
           end
         end
 
