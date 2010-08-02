@@ -36,7 +36,7 @@ module Chat
       require 'gravatarify'
       include Gravatarify::Helper
       wrap_in :div
-      
+
       def content
         h2 room.name
         render message_form

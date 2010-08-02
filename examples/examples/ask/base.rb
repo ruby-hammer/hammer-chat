@@ -15,7 +15,7 @@ module Examples
         numbers.inject {|sum, num| sum + num }
       end
 
-      class Widget < Hammer::Widget::Base
+      class Widget < superclass::Widget
 
         def content
           strong 'Numbers:'
@@ -24,7 +24,7 @@ module Examples
           else
             numbers.each_with_index do |number, index|
               text '+' if index > 0
-              a number.to_s, :callback => on(:click) {
+              link_to(number.to_s).action do
                 @counter = ask Examples::Ask::Counter.new(:counter => number) do |answer|
                   if answer
                     @numbers.delete_at(index)
@@ -32,7 +32,7 @@ module Examples
                   end
                   @counter = nil
                 end
-              }
+              end
             end
             #        text component.numbers.join(' + ')
             text " = #{sum}"
@@ -44,7 +44,7 @@ module Examples
           if counter
             render counter
           else
-            a 'Add Number', :callback => on(:click) {
+            link_to('Add Number').action do
               # if 'Select Number' is clicked, +counter+ is set and
               # ask-callback is set. Both blocks are evaluated inside
               # the same component.
@@ -54,7 +54,7 @@ module Examples
                 end
                 @counter = nil
               end
-            }
+            end
           end
         end
       end

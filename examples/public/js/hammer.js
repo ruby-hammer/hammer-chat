@@ -6,197 +6,252 @@
 //  child.prototype.constructor = child;
 //};
 
-var Hammer = function() {
-  this.sendLogBack = false;
-  this.hashchange = true;
-};
+(function($) {
 
-Hammer.prototype = {
-  _safely: function(func, obj) {
-    try {
-      return func.call(obj);
-    } catch (e) {
-      Hammer.Logger.error(e.stack);
+  //   jQuery.fn.myPlugin = function(settings) {
+  //     var config = {'foo': 'bar'};
+  //     if (settings) $.extend(config, settings);
+  //
+  //     this.each(function(i, elem) {
+  //       // element-specific code here
+  //     });
+  //
+  //     return this;
+  //   };
+
+  var logger = {
+    error:  function(message) {
+      console.error(message);
+    //    if(hammer.sendLogBack == true) new Hammer.Log('error', message).send();
+    },
+
+    warn:  function(message) {
+      console.warn(message);
+    //    if(hammer.sendLogBack == true) new Hammer.Log('warn', message).send();
+    },
+
+    info:  function(message) {
+      console.info(message);
+    //    if(hammer.sendLogBack == true) new Hammer.Log('info', message).send();
+    },
+
+    debug:  function(message) {
+      console.debug(message);
+    //    if(hammer.sendLogBack == true) new Hammer.Log('debug', message).send();
     }
-  },
+  };
 
-  callback: function(event) {
-    return hammer._safely( function() {
-      var data = this._ids();
-      var json = JSON.parse(event.currentTarget.getAttribute("data-callback-" + event.type));
+  var dump = function(obj) {
+    logger.debug(obj);
+    return obj
+  }
 
-      if (json.action) data.action_id = json.action;
-      if (json.form) {
-        data.form = {};
-        $("[data-form-id=" + json.form + "]").each(function(i, elem) {
-          var componentId = elem.getAttribute('data-component-id');
-          data.form[componentId] = {};
-          $(elem).find("[data-value]").each(
-            function(i,elem) {
-              data.form[componentId][elem.getAttribute('data-value')] = $(elem).val();
-            })
-        })
+  var reciever = {
+    execute: function(json) {
+      if (json.html) this.replaceBody(json.html);
+      if (json.js) this.evalJs(json.js);
+      if (json.context_id) this.setContextId(json.context_id);
+    //    if (this.json.hash) this._setHash();
+    },
+
+    replaceBody: function(html) {
+      $("body").html(html);
+      $('body').trigger('hammer.update') // FIXME trigger global event
+    },
+
+    evalJs: function(js) {
+      eval(js);
+    },
+
+    setContextId: function(contextId) {
+      hammer.settings.contextId = contextId;
+    }
+
+  //    setHash: function() {
+  //      location.hash = this.json.hash;
+  //    }
+  }
+
+  var hammer = {
+    setupWebsocket: function() {
+      if (!this.websocket) {
+        this.websocket = new WebSocket("ws://" + this.settings.server + ":" + this.settings.port + "/");
+
+        this.websocket.onmessage = function(evt) {
+          hammer.safely( function() {
+            logger.debug("recieving: " + evt.data);
+            reciever.execute(JSON.parse(evt.data));
+          // if (hammer.bench) hammer.callRandomAction();
+          });
+        };
+
+        this.websocket.onclose = function() {
+          hammer.noConnection()
+        };
+        this.websocket.onerror = function() {
+          hammer.noConnection()
+        };
+
+        this.websocket.onopen = function() {
+          logger.debug("WebSocket connected...");
+          hammer.requestContent();
+        };
       }
-      event.preventDefault();
-      return this._send(data);
-    }, this);
-  },
+    },
 
-  _noConnection: function() {
-    alert('Connection to server was lost, click OK to reload.');
-    location.reload();
-  },
+    recieve: function(obj) {
+      (new Hammer.Reciever(obj))._execute();
+    },
 
-  _setVariables: function(obj) {
-    var property;
-    for (property in obj) {
-      this[property] = obj[property];
+    requestContent: function() {
+      message().send();
+    },
+
+    noConnection: function() {
+      alert('Connection to server was lost, click OK to reload.');
+      location.reload();
+    },
+
+    settings: {
+      set: function(obj) {
+        $.extend(this, obj);
+      },
+
+      check: function() {
+        if (!this.sessionId) throw Error('no sessionId')
+        if (!this.server) throw Error('no server')
+        if (!this.port) throw Error('no port')
+      }
+    },
+
+    safely: function(func, obj) {
+      try {
+        return func.call(obj);
+      } catch (e) {
+        logger.error(e);
+        logger.error(e.stack);
+      }
+    },
+
+    Message: function() {
+      this.session_id = hammer.settings.sessionId
+      this.context_id = hammer.settings.contextId,
+      this.hash = location.hash.replace(/^#/, '')
     }
-  },
+  }
 
-  _checkVariables: function() {
-    if (!this.sessionId) throw Error('no sessionId')
-    if (!this.server) throw Error('no server')
-    if (!this.port) throw Error('no port')
-  },
+  hammer.Message.prototype = {
+    send: function() {
+      var json = JSON.stringify(this);
+      logger.debug("sending: " + json);
+      if(hammer.websocket) {
+        hammer.websocket.send(json);
+        _message = undefined;
+      } else {
+        throw Error('no websocket')
+      }
+    },
 
-  _setupWebsocket: function() {
-    if (!this.websocket) {
-      this.websocket = new WebSocket("ws://" + this.server + ":" + this.port + "/");
+    setAction: function(id, args) {
+      if (this.action_id)
+        throw Error('already set');
+      else {
+        this.action_id = id;
+        this.arguments = args;
+      }
+      return this;
+    },
 
-      this.websocket.onmessage = function(evt) {
-        hammer._safely( function() {
-          Hammer.Logger.debug("recieving: " + evt.data);
-          hammer._recieve(JSON.parse(evt.data));
-          if (hammer.bench) hammer.callRandomAction();
-        });
-      };
-
-      this.websocket.onclose = function() {
-        hammer._noConnection()
-      };
-      this.websocket.onerror = function() {
-        hammer._noConnection()
-      };
-
-      this.websocket.onopen = function() {
-        Hammer.Logger.debug("WebSocket connected...");
-        hammer._requestContent();
-      };
+    setValue: function(componentId, key, value) {
+      if (!this.form) this.form = {};
+      if (!this.form[componentId]) this.form[componentId] = {};
+      this.form[componentId][key] = value;
     }
-  },
+  }
 
-  //  callRandomAction: function() {
-  //    var arr = $('a[data-action-id]');
-  //    this.action( arr[Math.floor(Math.random()*arr.size())].getAttribute('data-action-id') );
-  //  },
+  var _message;
+  function message() {
+    if(_message)
+      return _message;
+    else
+      return _message = new hammer.Message();
+  }
 
-  _recieve: function(obj) {
-    (new Hammer.Reciever(obj))._execute();
-  },
-
-  _requestContent: function() {
-    this._send(this._ids());
-  },
-
-  _ids: function() {
-    return {
-      session_id: this.sessionId,
-      hash: location.hash.replace(/^#/, ''),
-      context_id: this.contextId
-    };
-  },
-
-  _send: function(obj) {
-    var json = JSON.stringify(obj);
-    Hammer.Logger.debug("sending: " + json);
-    this.websocket.send(json);
-  },
-
-  _events: function() {
-
-    var events = $([ 'blur', 'focus', 'focusin', 'focusout', 'load', 'resize', 'scroll', 'unload', 'click', 'dblclick',
-      'mousedown', 'mouseup', 'mousemove', 'mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'change', 'select',
-      'submit', 'keydown', 'keypress', 'keyup', 'error'])
-
-    events.each( function(i, event) {
-      $('[data-callback-'+event+']').live(event, function(event) {
-        hammer.callback(event)
+  $.namespace('hammer', {
+    inherited: true,
+    action: function(id, args) {
+      return this.each(function() {
+        message().setAction(id || $(this).hammer.actionId(), args);
       });
+    },
+
+    send: function() {
+      message().send();
+      return this;
+    },
+
+    form: function() {
+      this.each(function() {
+        var formId = $(this).hammer.formId();
+        if (formId) {
+          $().hammer.component(formId).find('*').hammer.setValue();
+        }
+      });
+      return this;
+    },
+
+    setSettings: function(settings) {
+      hammer.settings.set(settings);
+    },
+
+    componentId: function() {
+      return this.filter('.component').attr('id') || this.parents('.component').attr('id');
+    },
+
+    formId: function() {
+      return this.attr('data-form-id');
+    },
+
+    component: function(id) {
+      return $('#' + id || hammer.componentId);
+    },
+
+    setValue: function() {
+      this.filter(':text,:radio,:checkbox,:password,:hidden,select,textarea').each(function() {
+        var name = $(this).attr('name');
+        if (name) message().setValue($(this).hammer.componentId(), name, $(this).val())
+      });
+      return this;
+    },
+
+    actionId: function() {
+      return this.attr('data-action-id');
+    },
+
+    eval: function() {
+      return this.each(function() {
+        var elem = $(this)
+        if (!elem.data('hammer.evaluated')) {
+          eval(elem.attr('data-js'));
+        }
+        elem.data('hammer.evaluated', true)
+      });
+    }
+  });
+
+  $(function() {
+    hammer.setupWebsocket();
+
+    $('body').bind('hammer.update', function() {
+      $('[data-js]').hammer.eval();
     });
-    
+
     $(window).bind('hashchange', function(evt) {
-      if (hammer.hashchange == true) {
-        Hammer.Logger.warn("hashchange trigered")
-        hammer._send(hammer._ids());
-      }
+      logger.warn("hashchange trigered")
+      message().send();
     });
-  },
 
-  initialize: function() {
-    this._events();
-    this._checkVariables();
-    this._setupWebsocket();
-  }
-}
-
-var hammer = new Hammer();
-
-Hammer.Logger = {
-  error:  function(message) {
-    console.error(message);
-  //    if(hammer.sendLogBack == true) new Hammer.Log('error', message).send();
-  },
-
-  warn:  function(message) {
-    console.warn(message);
-  //    if(hammer.sendLogBack == true) new Hammer.Log('warn', message).send();
-  },
-
-  info:  function(message) {
-    console.info(message);
-  //    if(hammer.sendLogBack == true) new Hammer.Log('info', message).send();
-  },
-
-  debug:  function(message) {
-    console.debug(message);
-  //    if(hammer.sendLogBack == true) new Hammer.Log('debug', message).send();
-  }
-};
+  });
 
 
-Hammer.Reciever = function(json) {
-  this.json = json;  
-}
-
-Hammer.Reciever.prototype = {
-  _execute: function() {
-    if (this.json.html) this._replaceBody();
-    if (this.json.js) this._evalJs();
-    if (this.json.context_id) this._setContextId();
-  //    if (this.json.hash) this._setHash();
-  },
-
-  _replaceBody: function() {    
-    $("body").html(this.json.html);
-    $(hammer).trigger('hammer.update')
-  },
-
-  _evalJs: function() {
-    eval(this.json.js);
-  },
-
-  _setContextId: function() {
-    hammer.contextId = this.json.context_id;
-  },
-
-  _setHash: function() {
-    location.hash = this.json.hash;
-  }
-}
-
-
-$(document).ready(function() {
-  hammer.initialize();
-});
-
+})(jQuery);

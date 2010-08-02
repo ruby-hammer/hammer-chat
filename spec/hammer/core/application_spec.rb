@@ -17,6 +17,6 @@ describe Hammer::Core::Application do
     last_response.should be_ok
     last_response.body.should match(/js\/hammer.js/)
   end
-  
+
 end
 

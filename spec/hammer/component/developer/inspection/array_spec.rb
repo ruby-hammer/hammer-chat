@@ -6,7 +6,7 @@ describe Hammer::Component::Developer::Inspection::Array do
   def self.array
     [:symbol, "str", 1]
   end
-  
+
   def array
     self.class.array
   end

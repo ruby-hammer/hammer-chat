@@ -3,14 +3,14 @@ require 'active_support'
 require 'erector'
 
 class Email < Erector::Widget
-  
+
   attr_reader :email
 
   def initialize(email)
     @email = email
     super()
   end
-  
+
   def content
     a email, :href => "mailto:#{email}"
   end

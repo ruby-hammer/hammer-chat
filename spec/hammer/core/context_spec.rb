@@ -29,7 +29,7 @@ describe Hammer::Core::Context do
 
     describe 'when dropped' do
       before { context.should_receive(:notify_observers).with(:drop, context) }
-      before { context.drop }      
+      before { context.drop }
       it { context.class.no_connection_contexts.should_not include(context) }
     end
   end

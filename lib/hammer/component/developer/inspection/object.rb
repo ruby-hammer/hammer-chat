@@ -44,7 +44,7 @@ module Hammer::Component::Developer::Inspection
 
       # renders packed form
       def packed
-        a "#{component_label}#{name}", :callback => on(:click) { toggle! }
+        link_to("#{component_label}#{name}").action { toggle! }
       end
 
       # renders name of the inspector

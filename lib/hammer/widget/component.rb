@@ -31,8 +31,6 @@ module Hammer::Widget::Component
   def respond_to?(symbol, include_private = false)
     component.respond_to?(symbol) || super
   end
-  
-  private
 
   # registers action to #component for later evaluation
   # @yield action block to register

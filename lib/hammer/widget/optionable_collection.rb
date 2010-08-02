@@ -5,7 +5,7 @@ module Hammer
 
     # Collection with options ability
     class OptionableCollection < Collection
-      
+
       # @param [Hash] assigns defines what will be rendered before, after, between or when nothing
       # @option assigns [Erector::Widget, Component::Base, String, Proc] :before renders before collection
       # @option assigns [Erector::Widget, Component::Base, String, Proc] :after renders after collection
@@ -25,7 +25,7 @@ module Hammer
       protected
 
       %w[before, after, between, nothing].map(&:to_sym).each do |method|
-        define_method method do 
+        define_method method do
           case value = instance_variable_get(:"@#{method}")
           when String then text value
           when Proc then value.call(self)

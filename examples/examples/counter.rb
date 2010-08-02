@@ -5,13 +5,15 @@ module Examples
     attr_reader :counter
     needs :counter => 0
 
-    class Widget < Hammer::Widget::Base
+    class Widget < superclass::Widget
+      wrap_in(:div)
+
       def content
         h3 'Counter'
         p do
           text("Value is #{counter} ")
-          a 'Increase', :callback => on(:click) { @counter += 1 }
-          a 'Decrease', :callback => on(:click) { @counter -= 1 }
+          link_to('Increase').action { @counter += 1 }
+          link_to('Decrease').action { @counter -= 1 }
           actions
         end
       end

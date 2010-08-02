@@ -6,7 +6,7 @@ module Hammer::Core
 
     use CommonLogger, Hammer.logger
     use Rack::Session::Pool
-      
+
     set(
       :logging => false,
       :server => %w[thin]

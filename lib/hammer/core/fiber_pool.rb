@@ -13,7 +13,7 @@ module Hammer::Core
     # another one from the queue
     def initialize(count = 50)
       @busy_fibers, @queue = {}, []
-      
+
       @fibers = Array.new(count) do
         Fiber.new do |block|
           loop do
@@ -26,14 +26,14 @@ module Hammer::Core
               block = Fiber.yield
             end
           end
-        end        
+        end
       end
     end
 
     # If there is an available fiber use it, otherwise, leave it to linger in a queue
     def spawn(&block)
-      if fiber = @fibers.shift        
-        @busy_fibers[fiber.object_id] = fiber        
+      if fiber = @fibers.shift
+        @busy_fibers[fiber.object_id] = fiber
         fiber.resume(block)
       else
         @queue << block

@@ -3,7 +3,7 @@ module Chat
     class Room
       include Hammer::Core::Observable
       observable_events :message
-    
+
       attr_reader  :messages
       attr_accessor :name
       def initialize(name = nil)
@@ -26,7 +26,7 @@ module Chat
       end
 
       @rooms = []
-      
+
       def self.rooms
         @rooms
       end

@@ -33,7 +33,7 @@ describe Hammer::Core::Observable do
       end
 
       describe 'when notified' do
-        it { lambda { a_observable.notify_observers :a_event }.should raise_error(RuntimeError, 'event called') }        
+        it { lambda { a_observable.notify_observers :a_event }.should raise_error(RuntimeError, 'event called') }
       end
 
       describe 'when deleted' do
@@ -48,6 +48,6 @@ describe Hammer::Core::Observable do
     end
   end
 
-  
+
 
 end

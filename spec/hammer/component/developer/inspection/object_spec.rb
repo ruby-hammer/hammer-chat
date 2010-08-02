@@ -59,7 +59,7 @@ describe Hammer::Component::Developer::Inspection::Object do
 
     describe '#components' do
       subject { super().components }
-      
+
       it { should_not be_empty }
       it { should be_kind_of(Array) }
       it { should have(1).items }

@@ -87,7 +87,7 @@ module Hammer::Core
             end
           end
         end
-          
+
         Hammer.logger.info '== Hammer WebSocket running.'
 
         EventMachine::add_periodic_timer(60) do # TODO probably useless

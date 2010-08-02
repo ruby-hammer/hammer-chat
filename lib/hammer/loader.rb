@@ -29,7 +29,7 @@ class Hammer::Loader
     unless loadable?(file)
       return false
     end
-    require file    
+    require file
     @loaded.push @load.delete(file)
     return true
   end

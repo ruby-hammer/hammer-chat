@@ -47,7 +47,7 @@ module Hammer::Component::Rendering
     widget_class.new(widget_assigns)
   end
 
-  # always pass component to widget, can be extended by overwritten 
+  # always pass component to widget, can be extended by overwritten
   def widget_assigns
     {:component => self}
   end

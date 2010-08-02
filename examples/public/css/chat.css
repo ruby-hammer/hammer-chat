@@ -25,17 +25,9 @@
 .chat-message_form-widget {
   vertical-align: middle;
   margin-bottom: 1em;
-  margin-right: 90px;
-}
-
-.chat-message_form-widget a {
-  float: right;
-  margin-top: 2px;
-  margin-right: -90px;
 }
 
 .chat-message_form-widget textarea {
-  display: inline;  
   width: 100%;
 }
 

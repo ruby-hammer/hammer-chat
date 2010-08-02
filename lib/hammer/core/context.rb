@@ -1,12 +1,12 @@
 # encoding: UTF-8
 
 module Hammer::Core
-  
+
   # represents context of user, each tab of browser has one of its own
   class Context
     include Observable
     include Hammer::Config
-      
+
     observable_events :drop
 
     attr_reader :id, :connection, :container, :hash
@@ -76,7 +76,6 @@ module Hammer::Core
     # @yield block scheduled into fiber_pool for delayed execution
     # @param [Boolean] restart try to restart when error?
     def schedule(restart = true, &block)
-      # TODO context queue
       @queue << block
       schedule_next(restart) unless @running
       self

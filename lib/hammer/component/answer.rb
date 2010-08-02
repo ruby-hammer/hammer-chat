@@ -34,5 +34,5 @@ module Hammer::Component::Answer
     raise 'not answering' unless answering?
     @asker.instance_exec answer, &@askers_callback
   end
-  
+
 end

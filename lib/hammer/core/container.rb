@@ -42,7 +42,7 @@ module Hammer::Core
     def drop
       Base.drop_container(self)
     end
-      
+
     # context's count
     def size
       @contexts.size

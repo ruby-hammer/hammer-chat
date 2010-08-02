@@ -7,6 +7,7 @@ module HammerMocks
     base.let(:container_mock) { mock(:container, :drop_context => true) }
     base.let(:context_mock) { mock(:context, :conteiner => container_mock) }
     base.let(:component_mock) { mock(:component, :context => context_mock) }
+    base.let(:widget_mock) { mock(:widget, :component => component_mock) }
   end
 end
 

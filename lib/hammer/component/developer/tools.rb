@@ -2,27 +2,27 @@
 
 module Hammer::Component::Developer
   class Tools < Hammer::Component::Base
-    
+
     attr_reader :tool
 
     class Widget < Hammer::Widget::Base
       def content
         strong 'Tools:'
         ul do
-          li { a "Log", :callback => on(:click) { @tool = Hammer::Component::Developer::Log.new } }
-          li { a "Inspector Hammer::Core::Base", :callback => on(:click) { @tool = inspector Hammer::Core::Base } }
-          li { a "Inspector Object", :callback => on(:click) { @tool = inspector Object } }
-          li { a "Inspector Hammer.logger", :callback => on(:click) { @tool = inspector Hammer.logger } }
+          li { link_to("Log").action { @tool = Hammer::Component::Developer::Log.new } }
+          li { link_to("Inspector Hammer::Core::Base").action { @tool = inspector Hammer::Core::Base } }
+          li { link_to("Inspector Object").action { @tool = inspector Object } }
+          li { link_to("Inspector Hammer.logger").action { @tool = inspector Hammer.logger } }
           li do
-            a "Inspector Chat::Model::Room.rooms", :callback => on(:click) { @tool = inspector Chat::Model::Room.rooms }
+            link_to("Inspector Chat::Model::Room.rooms").action { @tool = inspector Chat::Model::Room.rooms }
           end if defined? Chat::Model::Room
-          li { a "GC and stats", :callback => on(:click) { @tool = Hammer::Component::Developer::Gc.new } }
+          li { link_to("GC and stats").action { @tool = Hammer::Component::Developer::Gc.new } }
           if defined? Memprof
-            li { a "Memprof dump all", :callback => on(:click) { Memprof.dump_all("heap_dump.json") } }
+            li { link_to("Memprof dump all").action { Memprof.dump_all("heap_dump.json") } }
           end
-          li { a "none", :callback => on(:click) { @tool = nil } }
+          li { link_to("none").action { @tool = nil } }
         end
-      
+
         hr
 
         render tool if tool
@@ -31,4 +31,4 @@ module Hammer::Component::Developer
 
   end
 end
-  
+

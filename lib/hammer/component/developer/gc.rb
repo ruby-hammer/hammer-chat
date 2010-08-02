@@ -12,7 +12,7 @@ module Hammer::Component::Developer
       def stats
         h1 'Stats'
         ul do
-          classes = [ 
+          classes = [
             Hammer::Core::Container,
             Hammer::Core::Context,
             Hammer::Widget::Base,
@@ -29,16 +29,16 @@ module Hammer::Component::Developer
         h1 'GC'
         ul do
           li do
-            a "GC::Profiler.enable? => #{GC::Profiler.enabled?}", :callback => on(:click) {
+            link_to("GC::Profiler.enable? => #{GC::Profiler.enabled?}").action do
               if GC::Profiler.enabled?
                 GC::Profiler.disable
                 GC::Profiler.clear
               else
                 GC::Profiler.enable
               end
-            }
+            end
           end if Hammer.v19?
-          li { a "GC.start", :callback => on(:click) { ObjectSpace.garbage_collect; ObjectSpace.garbage_collect }}
+          li { link_to("GC.start").action { ObjectSpace.garbage_collect }}
         end
 
         pre { code GC::Profiler.result } if Hammer.v19?

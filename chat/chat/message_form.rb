@@ -1,21 +1,21 @@
 module Chat
-  class MessageForm < Hammer::Component::FormPart
+  class MessageForm < Hammer::Component::Base
 
+    include Hammer::Component::Form
     alias_method(:message, :record)
 
-    class Widget < Hammer::Component::FormPart::Widget
+    class Widget < superclass::Widget
       wrap_in :div
-      
+
       def content
-        a "Send", :callback => on(:click, component.form) {
-            if message.valid?
-              message.time!
-              answer!(message)
-            end
-          }
-        widget Hammer::Widget::FormPart::Textarea, :value => :text, :options =>
-            { :rows => 2, :class => %w[ui-widget-content ui-corner-all] }
-        
+        widget Hammer::Widget::Form::Textarea, :value => :text,
+            :options => { :rows => 2, :class => %w[ui-widget-content ui-corner-all] }
+        submit("Send").update do
+          if message.valid?
+            message.time!
+            answer!(message)
+          end
+        end
       end
     end
 

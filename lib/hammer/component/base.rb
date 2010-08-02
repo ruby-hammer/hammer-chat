@@ -9,6 +9,15 @@ module Hammer::Component
     include Passing
     include Inspection
 
-    const_set :Widget, Hammer::Widget::Base
+    class Widget < Hammer::Widget::Base
+      wrap_in :div
+
+      def wrapper_options
+        super.merge :id => component.object_id, :class => 'component' do |key, old, new|
+          [*old] + [*new] if key == :class
+        end
+      end
+
+    end
   end
 end

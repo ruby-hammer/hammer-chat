@@ -4,11 +4,11 @@ unless defined? Hammer
   # gems
   require 'active_support/core_ext'
   require 'active_support/basic_object'
+  require 'active_support/json'
   require 'erector'
   require 'sinatra/base'
   require 'em-websocket'
   require 'configliere'
-  require 'json/pure' # TODO require something faster
 
   # stdlib
   require 'pp'

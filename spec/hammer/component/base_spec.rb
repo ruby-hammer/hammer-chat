@@ -50,7 +50,7 @@ describe Hammer::Component::Base do
         before { component; @asked.answer!(:answer) }
         it { should == :answer }
       end
-    end    
+    end
   end
 
   describe '#widget', '#component' do
@@ -58,5 +58,5 @@ describe Hammer::Component::Base do
     it { should == @component }
   end
 
-  
+
 end

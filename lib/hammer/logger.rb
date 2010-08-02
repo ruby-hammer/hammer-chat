@@ -48,7 +48,7 @@ module Hammer
       else
         @log = log
       end
-      
+
       #      EM.schedule do
       #        EM.attach(log) do |connection|
       #          Hammer.logger.instance_eval do
@@ -88,7 +88,7 @@ module Hammer
         end                                                             # end
       EOT
     end
-    
+
     def exception(e)
       error "#{e.class}: #{e.message}\n" + e.backtrace.map {|line| "  "+line }.join("\n")
     end
@@ -104,6 +104,6 @@ module Hammer
 
   end
 
-  
+
 end
 

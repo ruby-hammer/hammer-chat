@@ -2,38 +2,34 @@
 
 module Examples
   module Form
-    class Base < Hammer::Component::FormPart
+    class Base < Hammer::Component::Base
+      include Hammer::Component::Form
 
       attr_reader :counter
-
       after_initialize { @counter = 0 }
 
-      class Widget < Hammer::Component::FormPart::Widget
+      class Widget < superclass::Widget
         wrap_in :div
 
         def content
-          p do
-            text 'name '
-            widget Hammer::Widget::FormPart::Input, :value => :name
-          end
-          p do
-            text 'sex '
-            widget Hammer::Widget::FormPart::Select, :value => :sex, :select_options => [nil, 'male', 'female']
-          end
-          p do
-            text 'description '
-            widget Hammer::Widget::FormPart::Textarea, :value => :description
-          end
+          widget Hammer::Widget::Form::Field, :value => :name, :label => 'Name:'
+          widget Hammer::Widget::Form::Hidden, :value => :hidden, :options => {:value => 'hid'}
+          widget Hammer::Widget::Form::Password, :value => :password, :label => 'Password:'
+          widget Hammer::Widget::Form::Select, :value => :sex, :label => 'Sex:',
+              :select_options => [nil, 'male', 'female']
+          widget Hammer::Widget::Form::Textarea, :value => :description, :label => 'Description:'
 
-          a "Send for the #{counter}th time", :callback => on(:click, component.form) { @counter += 1 }
+          submit("Send for the #{counter}th time").update { @counter += 1 }
 
           h4 'Values:'
           ul do
-            li value(:name).inspect
-            li value(:sex).inspect
-            li value(:description).inspect
-          end          
-          
+            record.members.each do |key|
+              li "#{key}: #{value(key).inspect}"
+            end
+          end
+
+          render sub if sub
+
         end
       end
 

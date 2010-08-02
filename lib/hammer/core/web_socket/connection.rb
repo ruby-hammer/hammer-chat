@@ -8,7 +8,7 @@ module Hammer::Core::WebSocket
     # automatically code Hash messages to JSON and perform logging when active
     def send(hash)
       Hammer.logger.debug "Websocket sending: #{hash}" if config[:logger][:show_traffic]
-      super(JSON[ hash ])
+      super hash.to_json
     end
 
     # automatically decode JSON messages to Hash and perform logging when active

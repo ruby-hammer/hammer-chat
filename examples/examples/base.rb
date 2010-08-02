@@ -4,16 +4,17 @@ module Examples
 
     attr_reader :example
 
-    class Widget < Hammer::Widget::Base
+    class Widget < superclass::Widget
       def content
         strong 'Examples:'
         ul do
-          li { a "Counters", :callback => on(:click) { @example = Examples::Counters::Base.new } }
-          li { a "#ask", :callback => on(:click) { @example = Examples::Ask::Base.new } }
-          li { a "form", :callback => on(:click) {
-              @example = Examples::Form::Base.new :record => Struct.new("Data", :name, :sex, :description).new
+          li { link_to("Counters").action { @example = Examples::Counters::Base.new } }
+          li { link_to("#ask").action { @example = Examples::Ask::Base.new } }
+          li { link_to("Form").action {
+              @example = Examples::Form::Base.new \
+                  :record => Struct.new("Data", :name, :sex, :password, :hidden, :description).new
             } }
-          li { a "none", :callback => on(:click) { @example = nil } }
+          li { link_to('none').action { @example = nil } }
         end
         hr
 

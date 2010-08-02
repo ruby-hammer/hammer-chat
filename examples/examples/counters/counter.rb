@@ -9,11 +9,11 @@ module Examples
       attr_reader :collection
 
       # we could use ::Counter::Widget but this si much nore flexible
-      class Widget < superclass.widget_class
+      class Widget < superclass::Widget
 
         # here we overwrite actions and to add Remove link
         def actions
-          a 'Remove', :callback => on(:click) { @collection.remove(self) }
+          link_to('Remove').action { @collection.remove(self) }
         end
       end
     end

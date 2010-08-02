@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Petr Chalupa"]
-  s.date = %q{2010-07-28}
+  s.date = %q{2010-07-31}
   s.description = %q{ruby component based state-full web framework}
   s.email = %q{hammer.framework@gmail.com}
   s.executables = ["hammer-memprof", "hammer-prof", "hammer"]
@@ -60,6 +60,7 @@ Gem::Specification.new do |s|
      "examples/public/js/jquery-ui-1.8.2.custom.min.js",
      "examples/public/js/jquery.ba-hashchange.js",
      "examples/public/js/jquery.ba-hashchange.min.js",
+     "examples/public/js/jquery.namespace.js",
      "examples/public/js/swfobject.js",
      "examples/public/js/web_socket.js",
      "lib/hammer.rb",
@@ -109,6 +110,9 @@ Gem::Specification.new do |s|
      "lib/hammer/widget/form_part/input.rb",
      "lib/hammer/widget/form_part/select.rb",
      "lib/hammer/widget/form_part/textarea.rb",
+     "lib/hammer/widget/helper.rb",
+     "lib/hammer/widget/helper/link_to.rb",
+     "lib/hammer/widget/jquery.rb",
      "lib/hammer/widget/layout.rb",
      "lib/hammer/widget/optionable_collection.rb",
      "lib/hammer/widget/wrapping.rb"
@@ -118,7 +122,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{ruby component based state-full web framework}
   s.test_files = [
-    "spec/hammer/widget/callback_spec.rb",
+    "spec/hammer/widget/jquery_spec.rb",
+     "spec/hammer/widget/callback_spec.rb",
      "spec/hammer/widget/base_spec.rb",
      "spec/hammer/widget/component_spec.rb",
      "spec/hammer/loader_spec.rb",

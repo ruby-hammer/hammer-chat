@@ -5,12 +5,17 @@ module Hammer::Widget
   # Abstract layout for Hammer applications
   class Layout < Erector::Widgets::Page
 
+    include Hammer::Widget::JQuery
+    needs :session_id
+
     #      depends_on :js, 'js/swfobject.js', 'js/FABridge.js', 'js/web_socket.js'
-    external :js, 'js/jquery-1.4.2.js'
-    external :js, 'js/jquery.ba-hashchange.js'
-    external :js, 'js/hammer.js'
-    external :css,  'css/developer.css'
-      
+    depends_on :js, 'js/jquery-1.4.2.js'
+    depends_on :js, 'js/jquery.ba-hashchange.js'
+    depends_on :js, 'js/jquery.namespace.js'
+    depends_on :js, 'js/hammer.js'
+
+    depends_on :css,'css/developer.css'
+
     def body_content
       set_variables(@session_id)
       loading
@@ -25,11 +30,12 @@ module Hammer::Widget
 
     # sets configuration
     def set_variables(session_id)
-      javascript("hammer._setVariables(%s);" % JSON[
-          :server => Hammer.config[:websocket][:server],
-          :port => Hammer.config[:websocket][:port],
-          :sessionId => session_id
-        ])
+      javascript(jquery do
+          jQuery!.hammer.setSettings(
+            :server => Hammer.config[:websocket][:server],
+            :port => Hammer.config[:websocket][:port],
+            :sessionId => session_id)
+        end)
     end
   end
 end

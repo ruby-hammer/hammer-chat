@@ -21,7 +21,7 @@ module Examples
 
       class Widget < Hammer::Widget::Collection
         def after
-          a 'Add counter', :callback => on(:click) { add }
+          link_to('Add counter').action { add }
         end
       end
 

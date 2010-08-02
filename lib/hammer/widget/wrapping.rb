@@ -15,6 +15,11 @@ module Hammer::Widget::Wrapping
     def wrapped_in
       self.wrapper
     end
+
+    # @return [String] class name transformed into CSS class, used by #content_with_wrapper
+    def css_class
+      @css_class ||= self.to_s.to_s.underscore.gsub '/', '-'
+    end
   end
 
   # Wraps widget with element set by .wrap_in. Method is called automatically use #content.
@@ -37,7 +42,7 @@ module Hammer::Widget::Wrapping
 
   # @return [Hash] options passed to wrapping element, intended for overwriting
   def wrapper_options
-    { :class => self.class.css_class, :id => object_id }
+    {:class => self.class.css_class}
   end
 
   # calls #content_with_wrapper in place of #content

@@ -1,2 +1,2 @@
-module Hammer::Widget    
+module Hammer::Widget
 end
