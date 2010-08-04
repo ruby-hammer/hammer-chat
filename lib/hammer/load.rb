@@ -1,9 +1,11 @@
+require "hammer/jquery.rb"
+require "hammer/weak_array.rb"
+
 require "hammer/widget.rb"
 require "hammer/widget/abstract.rb"
 require "hammer/widget/wrapping.rb"
 require "hammer/widget/component.rb"
 require "hammer/widget/element_builder.rb"
-require "hammer/jquery.rb"
 require "hammer/widget/jquery.rb"
 require "hammer/widget/helper.rb"
 require "hammer/widget/helper/link_to.rb"

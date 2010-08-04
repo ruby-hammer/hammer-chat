@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Petr Chalupa"]
-  s.date = %q{2010-07-31}
+  s.date = %q{2010-08-04}
   s.description = %q{ruby component based state-full web framework}
   s.email = %q{hammer.framework@gmail.com}
-  s.executables = ["hammer-memprof", "hammer-prof", "hammer"]
+  s.executables = ["hammer-memprof", "hammer", "hammer-prof"]
   s.extra_rdoc_files = [
     "MIT-LICENSE",
      "README.md",
@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "examples/config.yml",
-     "examples/examples/app_layout.rb",
      "examples/examples/ask/base.rb",
      "examples/examples/ask/counter.rb",
      "examples/examples/base.rb",
@@ -30,6 +29,7 @@ Gem::Specification.new do |s|
      "examples/examples/counters/base.rb",
      "examples/examples/counters/counter.rb",
      "examples/examples/form/base.rb",
+     "examples/examples/layout.rb",
      "examples/public/css/basic.css",
      "examples/public/css/chat.css",
      "examples/public/css/developer.css",
@@ -53,7 +53,6 @@ Gem::Specification.new do |s|
      "examples/public/img/loading.gif",
      "examples/public/js/FABridge.js",
      "examples/public/js/WebSocketMain.swf",
-     "examples/public/js/chat.js",
      "examples/public/js/hammer.js",
      "examples/public/js/jquery-1.4.2.js",
      "examples/public/js/jquery-1.4.2.min.js",
@@ -80,7 +79,7 @@ Gem::Specification.new do |s|
      "lib/hammer/component/developer/inspection/simple.rb",
      "lib/hammer/component/developer/log.rb",
      "lib/hammer/component/developer/tools.rb",
-     "lib/hammer/component/form_part.rb",
+     "lib/hammer/component/form.rb",
      "lib/hammer/component/inspection.rb",
      "lib/hammer/component/passing.rb",
      "lib/hammer/component/rendering.rb",
@@ -95,23 +94,28 @@ Gem::Specification.new do |s|
      "lib/hammer/core/fiber_pool.rb",
      "lib/hammer/core/observable.rb",
      "lib/hammer/core/web_socket/connection.rb",
+     "lib/hammer/jquery.rb",
      "lib/hammer/load.rb",
      "lib/hammer/loader.rb",
      "lib/hammer/logger.rb",
      "lib/hammer/runner.rb",
+     "lib/hammer/weak_array.rb",
      "lib/hammer/widget.rb",
      "lib/hammer/widget/abstract.rb",
      "lib/hammer/widget/base.rb",
-     "lib/hammer/widget/callback.rb",
      "lib/hammer/widget/collection.rb",
      "lib/hammer/widget/component.rb",
-     "lib/hammer/widget/form_part.rb",
-     "lib/hammer/widget/form_part/abstract.rb",
-     "lib/hammer/widget/form_part/input.rb",
-     "lib/hammer/widget/form_part/select.rb",
-     "lib/hammer/widget/form_part/textarea.rb",
+     "lib/hammer/widget/element_builder.rb",
+     "lib/hammer/widget/form.rb",
+     "lib/hammer/widget/form/abstract.rb",
+     "lib/hammer/widget/form/field.rb",
+     "lib/hammer/widget/form/hidden.rb",
+     "lib/hammer/widget/form/password.rb",
+     "lib/hammer/widget/form/select.rb",
+     "lib/hammer/widget/form/textarea.rb",
      "lib/hammer/widget/helper.rb",
      "lib/hammer/widget/helper/link_to.rb",
+     "lib/hammer/widget/helper/submit.rb",
      "lib/hammer/widget/jquery.rb",
      "lib/hammer/widget/layout.rb",
      "lib/hammer/widget/optionable_collection.rb",
@@ -122,22 +126,24 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{ruby component based state-full web framework}
   s.test_files = [
-    "spec/hammer/widget/jquery_spec.rb",
-     "spec/hammer/widget/callback_spec.rb",
+    "spec/hammer/widget/component_spec.rb",
      "spec/hammer/widget/base_spec.rb",
-     "spec/hammer/widget/component_spec.rb",
-     "spec/hammer/loader_spec.rb",
-     "spec/hammer/component/form_part_spec.rb",
+     "spec/hammer/weak_array_test.rb",
+     "spec/hammer/jquery_spec.rb",
+     "spec/hammer/weak_array_spec.rb",
+     "spec/hammer/component/base_spec.rb",
      "spec/hammer/component/developer/inspection/array_spec.rb",
      "spec/hammer/component/developer/inspection/object_spec.rb",
-     "spec/hammer/component/base_spec.rb",
+     "spec/hammer/component/form_spec.rb",
+     "spec/hammer/core/application_spec.rb",
+     "spec/hammer/core/base_spec.rb",
      "spec/hammer/core/container_spec.rb",
      "spec/hammer/core/context_spec.rb",
      "spec/hammer/core/observable_spec.rb",
-     "spec/hammer/core/application_spec.rb",
-     "spec/hammer/core/base_spec.rb",
+     "spec/hammer/loader_spec.rb",
+     "spec/spec_helper.rb",
      "spec/benchmark/rendering_spec.rb",
-     "spec/spec_helper.rb"
+     "spec/benchmark/hash_spec.rb"
   ]
 
   if s.respond_to? :specification_version then
