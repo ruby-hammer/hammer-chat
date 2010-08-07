@@ -17,8 +17,8 @@ describe Hammer::Widget::Base do
   end
 
   describe Foo::BooWidget, "#to_html", 'when wrap_in(nil)' do
-    subject { (@widget = Foo::BooWidget.new(:component => component_mock)).to_html }
-    it { should == "" }
+    subject { lambda { (@widget = Foo::BooWidget.new(:component => component_mock)).to_html }}
+    it { should raise_error }
   end
 
   describe Foo::FooWidget do

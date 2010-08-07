@@ -1,3 +1,5 @@
+require "hammer/monkey/erector.rb"
+
 require "hammer/jquery.rb"
 require "hammer/weak_array.rb"
 
@@ -12,8 +14,6 @@ require "hammer/widget/helper/link_to.rb"
 require "hammer/widget/helper/submit.rb"
 require "hammer/widget/layout.rb"
 require "hammer/widget/base.rb"
-require "hammer/widget/collection.rb"
-require "hammer/widget/optionable_collection.rb"
 
 require "hammer/component.rb"
 require "hammer/component/abstract.rb"
@@ -21,11 +21,16 @@ require "hammer/component/rendering.rb"
 require "hammer/component/answer.rb"
 require "hammer/component/passing.rb"
 require "hammer/component/inspection.rb"
+require "hammer/component/state.rb"
+require "hammer/component/traversing.rb"
 require "hammer/component/base.rb"
 require "hammer/component/form.rb"
 require "hammer/component/developer/gc.rb"
 require "hammer/component/developer/tools.rb"
 require "hammer/component/developer/log.rb"
+
+require "hammer/widget/collection.rb"
+require "hammer/widget/optionable_collection.rb"
 
 require "hammer/core.rb"
 require "hammer/core/observable.rb"

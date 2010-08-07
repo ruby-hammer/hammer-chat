@@ -1,14 +1,14 @@
 module Hammer::Core::Observable
   def self.included(base)
     base.extend ClassMethods
+    base.class_inheritable_array :_observable_events, :instance_reader => false, :instance_writer => false
   end
 
   module ClassMethods
     # @return [Array<Symbol>] allowed events
     def observable_events(*events)
-      @_observable_events = events unless events.blank?
-      return @_observable_events unless @_observable_events.blank?
-      raise ArgumentError
+      self._observable_events = events unless events.blank?
+      return _observable_events
     end
   end
 

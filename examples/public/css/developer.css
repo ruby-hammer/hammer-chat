@@ -7,17 +7,14 @@
   padding-right: 0.2em;
 }
 
-.hammer-component-developer-log-widget p {
+.hammer-component-developer-entry-widget {
   font-family: monospace;
   font-size: 90%;
   margin: 0;
 }
 
-.hammer-component-developer-log-widget .odd{
-  background-color: #eee;
-}
 
-.hammer-component-developer-tools-widget code {
+.hammer-component-developer-gc-widget code {
   font-family: monospace;
 }
 

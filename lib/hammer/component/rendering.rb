@@ -76,9 +76,18 @@ module Hammer::Component::Rendering
     @widget ||= create_widget
   end
 
-  # @return [String] html
-  def to_html
-    widget.to_html
+  # @return [String] rendered html
+  # @param [Hash] options
+  def to_html(options = {})    
+    if options[:update]
+      if changed?
+        widget.to_html(options)
+      else
+        ''
+      end + children.map {|child| child.to_html(options) }.join
+    else 
+      widget.to_html(options)
+    end
   end
 
   # @return [Class] which is used to insatiate widget

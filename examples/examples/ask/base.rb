@@ -6,9 +6,11 @@ module Examples
       # +numbers+ - answered numbers
       # +counter+ is place where is counter stored or form would been
       attr_reader :numbers, :counter
+      changing { attr_writer :counter, :numbers }
+      children :counter
 
       after_initialize do
-        @numbers = []
+        self.numbers = []
       end
 
       def sum
@@ -24,18 +26,19 @@ module Examples
             numbers.each_with_index do |number, index|
               text '+' if index > 0
               link_to(number.to_s).action do
-                @counter = ask Examples::Ask::Counter.new(:counter => number) do |answer|
+                self.counter = ask Examples::Ask::Counter.new(:counter => number) do |answer|
                   if answer
                     @numbers.delete_at(index)
                     @numbers.insert(index, answer)
+                    change!
                   end
-                  @counter = nil
+                  self.counter = nil
                 end
               end
             end
-            #        text component.numbers.join(' + ')
             text " = #{sum}"
           end
+
           br
 
           # If counter is set, let's show it
@@ -47,11 +50,12 @@ module Examples
               # if 'Select Number' is clicked, +counter+ is set and
               # ask-callback is set. Both blocks are evaluated inside
               # the same component.
-              @counter = ask Examples::Ask::Counter.new do |answer|
+              self.counter = ask Examples::Ask::Counter.new do |answer|
                 if answer
                   @numbers << answer
+                  change!
                 end
-                @counter = nil
+                self.counter = nil
               end
             end
           end

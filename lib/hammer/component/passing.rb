@@ -1,8 +1,13 @@
 module Hammer::Component::Passing
 
+  def self.included(base)
+    base.children :passed_on
+    base.send :attr_reader, :passed_on
+  end
+
   # pass on if {#passed?}
-  def to_html
-    @passed_on ? @passed_on.to_html : super
+  def widget
+    @passed_on ? @passed_on.widget : super
   end
 
   # rendering is passed on to +component+. Usually used with ask.
@@ -25,5 +30,4 @@ module Hammer::Component::Passing
   def passed?
     @passed_on.present?
   end
-
 end

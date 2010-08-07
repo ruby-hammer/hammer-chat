@@ -36,9 +36,10 @@ module Hammer::Component::Developer
               else
                 GC::Profiler.enable
               end
+              change!
             end
           end if Hammer.v19?
-          li { link_to("GC.start").action { ObjectSpace.garbage_collect }}
+          li { link_to("GC.start").action { ObjectSpace.garbage_collect; change! } }
         end
 
         pre { code GC::Profiler.result } if Hammer.v19?

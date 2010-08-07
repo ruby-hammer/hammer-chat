@@ -51,6 +51,7 @@
       if (json.html) this.replaceBody(json.html);
       if (json.js) this.evalJs(json.js);
       if (json.context_id) this.setContextId(json.context_id);
+      if (json.update) this.update(json.update);
     //    if (this.json.hash) this._setHash();
     },
 
@@ -65,6 +66,42 @@
 
     setContextId: function(contextId) {
       hammer.settings.contextId = contextId;
+    },
+
+    update: function(update) {
+      var components = $('.component');
+      var updates = $(update);
+      var places = updates.find('div[data-component-replace]');
+
+      // remove old .changed
+      components.removeClass('changed');
+
+      // building tree from updates
+      var tree_updates = $();
+      updates.each(function(i, update) {
+        var place = places.filter('[data-component-replace="' + $(update).attr('id') +'"]')
+        if (place.length > 0) {
+          place.replaceWith(update);
+        } else {
+          tree_updates.push(update);
+        }
+      });
+
+      // moving unchanged components
+      tree_updates.find('div[data-component-replace]').each(function(i, element) {
+        var componentId = $(element).attr('data-component-replace');
+        $(element).replaceWith(components.find('#' + componentId));
+      });
+
+      // moving to dom
+      tree_updates.each(function(i, element) {
+        var place = components.filter('#' + $(element).attr('id'))
+        if (place.length > 0) {
+          place.replaceWith(element);
+        } else {
+          $('body').html(element);
+        }
+      });
     }
 
   //    setHash: function() {

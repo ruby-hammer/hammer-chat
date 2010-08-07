@@ -3,7 +3,7 @@
 module Hammer::Widget
 
   # Abstract widget to render collections
-  class Collection < Base
+  class Collection < Hammer::Component::Base::Widget
 
     needs :collection => nil
 

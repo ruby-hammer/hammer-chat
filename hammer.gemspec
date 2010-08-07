@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Petr Chalupa"]
-  s.date = %q{2010-08-04}
+  s.date = %q{2010-08-07}
   s.description = %q{ruby component based state-full web framework}
   s.email = %q{hammer.framework@gmail.com}
-  s.executables = ["hammer-memprof", "hammer", "hammer-prof"]
+  s.executables = ["hammer-memprof", "hammer-prof", "hammer"]
   s.extra_rdoc_files = [
     "MIT-LICENSE",
      "README.md",
@@ -83,6 +83,8 @@ Gem::Specification.new do |s|
      "lib/hammer/component/inspection.rb",
      "lib/hammer/component/passing.rb",
      "lib/hammer/component/rendering.rb",
+     "lib/hammer/component/state.rb",
+     "lib/hammer/component/traversing.rb",
      "lib/hammer/config.rb",
      "lib/hammer/core.rb",
      "lib/hammer/core/action.rb",
@@ -98,6 +100,7 @@ Gem::Specification.new do |s|
      "lib/hammer/load.rb",
      "lib/hammer/loader.rb",
      "lib/hammer/logger.rb",
+     "lib/hammer/monkey/erector.rb",
      "lib/hammer/runner.rb",
      "lib/hammer/weak_array.rb",
      "lib/hammer/widget.rb",
@@ -126,24 +129,25 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{ruby component based state-full web framework}
   s.test_files = [
-    "spec/hammer/widget/component_spec.rb",
+    "spec/hammer/jquery_spec.rb",
      "spec/hammer/widget/base_spec.rb",
-     "spec/hammer/weak_array_test.rb",
-     "spec/hammer/jquery_spec.rb",
+     "spec/hammer/widget/component_spec.rb",
+     "spec/hammer/loader_spec.rb",
      "spec/hammer/weak_array_spec.rb",
-     "spec/hammer/component/base_spec.rb",
+     "spec/hammer/component/state_spec.rb",
+     "spec/hammer/component/form_spec.rb",
      "spec/hammer/component/developer/inspection/array_spec.rb",
      "spec/hammer/component/developer/inspection/object_spec.rb",
-     "spec/hammer/component/form_spec.rb",
-     "spec/hammer/core/application_spec.rb",
-     "spec/hammer/core/base_spec.rb",
+     "spec/hammer/component/base_spec.rb",
      "spec/hammer/core/container_spec.rb",
      "spec/hammer/core/context_spec.rb",
      "spec/hammer/core/observable_spec.rb",
-     "spec/hammer/loader_spec.rb",
-     "spec/spec_helper.rb",
+     "spec/hammer/core/application_spec.rb",
+     "spec/hammer/core/base_spec.rb",
+     "spec/hammer/weak_array_test.rb",
      "spec/benchmark/rendering_spec.rb",
-     "spec/benchmark/hash_spec.rb"
+     "spec/benchmark/hash_spec.rb",
+     "spec/spec_helper.rb"
   ]
 
   if s.respond_to? :specification_version then

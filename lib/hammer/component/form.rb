@@ -4,7 +4,8 @@ module Hammer::Component::Form
     base.class_eval do
       needs :record
       attr_reader :record
-    end
+      changing :set_value
+    end    
   end
 
   # values from form's tags are stored here. They are automatically updated when :form callback is triggered

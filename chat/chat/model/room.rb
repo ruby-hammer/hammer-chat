@@ -2,7 +2,7 @@ module Chat
   module Model
     class Room
       include Hammer::Core::Observable
-      observable_events :message
+      observable_events :new, :deleted
 
       attr_reader  :messages
       attr_accessor :name
@@ -16,9 +16,9 @@ module Chat
       end
 
       def add_message(message)
-        @messages.unshift message
-        @messages.pop if @messages.size > 50
-        notify_observers(:message)
+        @messages.push message
+        notify_observers(:deleted, @messages.shift) if @messages.size > 50
+        notify_observers(:new, message)
       end
 
       def last_update

@@ -14,6 +14,10 @@ module Hammer
         setup_application
         Hammer.logger.info "== Settings\n" + config.pretty_inspect
         Hammer.logger.level = config[:logger][:level]
+        #        if config[:irb]
+        #          require 'irb'
+        #          Thread.new { IRB.start }
+        #        end
         Core::Application.run!
       end
 

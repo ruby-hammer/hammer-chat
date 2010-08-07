@@ -32,4 +32,22 @@ module Hammer::Widget::Component
     component.respond_to?(symbol) || super
   end
 
+  def render(obj)
+    if obj.kind_of?(Hammer::Component::Base)
+      render_component(obj)
+    else super
+    end
+  end
+
+  private
+
+  # renders replacer in place of component when rendering update
+  def render_component(component)
+    unless render_options[:update]
+      widget component.widget
+    else
+      div :'data-component-replace' => component.object_id
+    end
+  end
+
 end
