@@ -4,7 +4,7 @@ module Chat
     needs :room, :user
     attr_reader :room, :user, :message_form, :messages
     changing { attr_writer :message_form }
-    component :message_form, :messages
+    children :message_form, :messages
 
     after_initialize do
       ask_message

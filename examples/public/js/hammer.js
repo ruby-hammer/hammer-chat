@@ -71,7 +71,11 @@
     update: function(update) {
       var components = $('.component');
       var updates = $(update);
-      var places = updates.find('div[data-component-replace]');
+      var places = {};
+      updates.find('div[data-component-replace]').each(function(i, place) {
+        var place = $(place)
+        places[place.attr('data-component-replace')] = place;
+      });
 
       // remove old .changed
       components.removeClass('changed');
@@ -79,8 +83,8 @@
       // building tree from updates
       var tree_updates = $();
       updates.each(function(i, update) {
-        var place = places.filter('[data-component-replace="' + $(update).attr('id') +'"]')
-        if (place.length > 0) {
+        var place = places[$(update).attr('id')];
+        if (place) {
           place.replaceWith(update);
         } else {
           tree_updates.push(update);

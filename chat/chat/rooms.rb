@@ -3,7 +3,7 @@ module Chat
 
     attr_reader :room, :user, :room_form
     changing { attr_writer :room_form, :room  }
-    component :room, :room_form
+    children :room, :room_form
 
     after_initialize do
       pass_on ask(Login.new(:record => Model::User.new)) { |user|
