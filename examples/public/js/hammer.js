@@ -72,7 +72,7 @@
       var components = $('.component');
       var updates = $(update);
       var places = {};
-      updates.find('div[data-component-replace]').each(function(i, place) {
+      updates.find('span[data-component-replace]').each(function(i, place) {
         var place = $(place)
         places[place.attr('data-component-replace')] = place;
       });
@@ -92,7 +92,7 @@
       });
 
       // moving unchanged components
-      tree_updates.find('div[data-component-replace]').each(function(i, element) {
+      tree_updates.find('span[data-component-replace]').each(function(i, element) {
         var componentId = $(element).attr('data-component-replace');
         $(element).replaceWith(components.find('#' + componentId));
       });

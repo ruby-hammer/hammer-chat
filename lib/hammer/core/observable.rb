@@ -34,12 +34,10 @@ module Hammer::Core::Observable
   # @param [Symbol] event to observe
   def notify_observers(event, *args)
     _observers(event).each do |observer, method|
-      observer.context.schedule do
-        if method.is_a?(Symbol)
-          observer.send method, *args
-        else
-          method.call *args
-        end
+      if Hammer.get_context == observer.context
+        notify_observer(observer, method, *args)
+      else
+        observer.context.schedule { notify_observer(observer, method, *args) }
       end
     end
   end
@@ -54,6 +52,14 @@ module Hammer::Core::Observable
     raise ArgumentError unless self.class.observable_events.include? event
     @_observers ||= {}
     @_observers[event] ||= {}
+  end
+
+  def notify_observer(observer, method, *args)
+    if method.is_a?(Symbol)
+      observer.send method, *args
+    else
+      method.call *args
+    end
   end
 
 end

@@ -1,6 +1,8 @@
 module Hammer::Component::State
 
   def self.included(base)
+    base.send :alias_method, :super_to_html, :to_html
+    base.send :include, InstanceMethods
     base.extend ClassMethods
     base.instance_eval do
       def method_added(name)
@@ -10,7 +12,7 @@ module Hammer::Component::State
       end
     end
     base.class_inheritable_array :changing_methods
-    base.after_initialize { change! }
+    base.after_initialize { change! }    
   end
 
   module ClassMethods
@@ -41,7 +43,7 @@ module Hammer::Component::State
 
     def extend_widget(widget_class)
       super
-      widget_class.send :include, Widget
+      widget_class.send :include, Widget unless widget_class.include? Widget
     end
 
     private
@@ -71,21 +73,58 @@ module Hammer::Component::State
       component.reset!
       return html
     end
+
+    def render(obj)
+      if obj.kind_of?(Hammer::Component::Base)
+        render_component(obj)
+      else super
+      end
+    end
+
+    protected
+
+    # renders replacer in place of component when rendering update
+    def render_component(component)
+      unless render_options[:update]
+        widget component.widget
+      else
+        span :'data-component-replace' => component.object_id
+      end
+    end
   end
 
-  # tells component that it's changed
-  def change!
-    @_changed = true
-  end
+  module InstanceMethods
 
-  # @return [Boolean] if component id changed
-  def changed?
-    @_changed
-  end
+    # tells component that it's changed
+    def change!
+      @_changed = true
+    end
 
-  # resets component change state
-  def reset!
-    @_changed = false
-  end
+    # @return [Boolean] if component id changed
+    def changed?
+      @_changed
+    end
 
+    # resets component change state
+    def reset!
+      @_changed = false
+    end
+
+    # @return [String] rendered html
+    # @param [Hash] options
+    def to_html(options = {})
+      return super unless options[:update]
+      self_update(options) + children_update(options)
+    end
+
+    protected
+
+    def self_update(options)
+      changed? ? super_to_html(options) : ''
+    end
+
+    def children_update(options)
+      children.map {|child| child.to_html(options) }.join
+    end
+  end
 end

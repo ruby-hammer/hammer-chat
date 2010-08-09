@@ -3,11 +3,20 @@ module Hammer::Component::Passing
   def self.included(base)
     base.children :passed_on
     base.send :attr_reader, :passed_on
+    base.extend ClassMethods
   end
 
-  # pass on if {#passed?}
-  def widget
-    @passed_on ? @passed_on.widget : super
+  module ClassMethods
+    def extend_widget(widget_class)
+      super
+      widget_class.send :include, Widget unless widget_class.include? Widget
+    end
+  end
+
+  module Widget
+    def render_component(component)
+      super self.component.passed? ? self.component.passed_on : component
+    end
   end
 
   # rendering is passed on to +component+. Usually used with ask.
@@ -30,4 +39,9 @@ module Hammer::Component::Passing
   def passed?
     @passed_on.present?
   end
+  
+  def to_html(options = {})
+    passed? ? passed_on.to_html(options) : super
+  end
+
 end

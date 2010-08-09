@@ -49,7 +49,6 @@ module Chat
     def ask_message
       self.message_form = ask Chat::MessageForm.new(:record => Chat::Model::Message.new(user)) do |message|
         room.add_message message
-        change!
         ask_message
       end
     end
