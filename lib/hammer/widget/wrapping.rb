@@ -18,13 +18,13 @@ module Hammer::Widget::Wrapping
 
     # @return [String] class name transformed into CSS class, used by #content_with_wrapper
     def css_class
-      @css_class ||= self.to_s.to_s.underscore.gsub '/', '-'
+      @css_class ||= self.to_s.underscore.gsub '/', '-'
     end
   end
 
-  # renders wrapper with content if +content+ is true
-  # @param [Boolean] content render content into wrapper ?
-  def wrapper(content = true, &block)
+  # renders wrapper with content in +block+
+  # @yield block content
+  def wrapper(&block)
     if self.class.wrapped_in
       send self.class.wrapped_in, wrapper_options, &block
     else

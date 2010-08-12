@@ -7,7 +7,7 @@ module Hammer::Component
     include Rendering
     include Traversing
     include State
-    include Answer
+    include Answering
     include Passing
     include Inspection
 
@@ -15,9 +15,11 @@ module Hammer::Component
       wrap_in :div
 
       def wrapper_options
-        super.merge :id => component.object_id, :class => 'component' do |key, old, new|
-          [*old] + [*new] if key == :class
-        end
+        super.merge :id => component.object_id
+      end
+
+      def wrapper_classes
+        super << 'component'
       end
 
     end
