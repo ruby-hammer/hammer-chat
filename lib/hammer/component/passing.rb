@@ -39,7 +39,7 @@ module Hammer::Component::Passing
   def passed?
     @passed_on.present?
   end
-  
+
   def to_html(options = {})
     passed? ? passed_on.to_html(options) : super
   end

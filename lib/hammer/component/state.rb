@@ -12,7 +12,7 @@ module Hammer::Component::State
       end
     end
     base.class_inheritable_array :changing_methods
-    base.after_initialize { change! }    
+    base.after_initialize { change! }
   end
 
   module ClassMethods
@@ -48,7 +48,7 @@ module Hammer::Component::State
 
     private
 
-    # hooks {#change!} after method with +name+
+    # hooks {InstanceMethods#change!} after method with +name+
     def hook_change_to_method(name)
       name =~ /^([\w_]*)(|\?|!|=)$/
       class_eval <<-STR , __FILE__, __LINE__+1
@@ -57,7 +57,7 @@ module Hammer::Component::State
           change!
         end
       STR
-      alias_method_chain(name, :change)      
+      alias_method_chain(name, :change)
     end
   end
 

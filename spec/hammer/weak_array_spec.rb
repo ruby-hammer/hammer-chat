@@ -22,7 +22,7 @@ describe Hammer::WeakArray do
   #  def add
   #    isolate { @array.push Object.new }
   #  end
-  
+
 
   #  describe 'with a obj' do
   #    before { add }
@@ -87,7 +87,7 @@ describe Hammer::WeakArray::ReferenceStore do
   let(:reference_arrays_by_obj_id) do
     store.instance_variable_get :@reference_arrays_by_obj_id
   end
-    
+
   describe '#add(1,-1)' do
     before { store.add(1, -1) }
 
@@ -174,5 +174,5 @@ describe Hammer::WeakArray::ReferenceStore do
 
     end
   end
-    
+
 end

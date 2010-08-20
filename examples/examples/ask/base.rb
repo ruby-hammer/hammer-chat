@@ -19,7 +19,7 @@ module Examples
 
       define_widget do
         def content
-          strong 'Numbers:'
+          strong 'Numbers: '
           if numbers.blank?
             text 'none'
           else

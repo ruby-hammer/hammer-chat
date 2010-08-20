@@ -28,7 +28,7 @@ module Chat
 
     def deleted_message(message)
       remove_message(message)
-    end    
+    end
 
     def context_dropped(context)
       leave!

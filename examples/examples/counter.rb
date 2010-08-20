@@ -7,8 +7,12 @@ module Examples
     needs :counter => 0
 
     define_widget do
+      css do
+        a { padding '0 0.2em' }
+      end
+
       def content
-        h3 'Counter'
+        h2 'Counter'
         p do
           text("Value is #{counter} ")
           link_to('Increase').action { self.counter += 1 }

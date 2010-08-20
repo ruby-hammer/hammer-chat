@@ -1,7 +1,9 @@
 require "hammer/monkey/erector.rb"
 
 require "hammer/jquery.rb"
+require "hammer/css.rb"
 require "hammer/weak_array.rb"
+require "hammer/sub_classes.rb"
 
 require "hammer/widget.rb"
 require "hammer/widget/abstract.rb"
@@ -9,6 +11,7 @@ require "hammer/widget/wrapping.rb"
 require "hammer/widget/component.rb"
 require "hammer/widget/element_builder.rb"
 require "hammer/widget/jquery.rb"
+require "hammer/widget/css.rb"
 require "hammer/widget/helper.rb"
 require "hammer/widget/helper/link_to.rb"
 require "hammer/widget/helper/submit.rb"

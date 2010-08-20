@@ -104,7 +104,7 @@ class Hammer::WeakArray
   def to_a
     self.inject([]) {|arr, obj| arr << obj }
   end
-  
+
   private
 
   # @return [Object, nil] retrieved object or nil

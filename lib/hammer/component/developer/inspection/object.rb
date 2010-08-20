@@ -25,7 +25,7 @@ module Hammer::Component::Developer::Inspection
     end
 
     changing :toggle!
-    
+
     protected
 
     # unpacks inspector, creates subinspectors for instance variables, constants etc.

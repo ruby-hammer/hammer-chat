@@ -4,6 +4,7 @@ module Hammer::Component
 
   # represents component of a page. The basic logic building blocks of a application.
   class Base < Abstract
+    include Hammer::SubClasses
     include Rendering
     include Traversing
     include State

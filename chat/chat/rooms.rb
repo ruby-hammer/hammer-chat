@@ -31,6 +31,14 @@ module Chat
     define_widget do
       wrap_in :div
 
+      def wrapper_classes
+        super << 'container'# << 'showgrid'
+      end
+
+      css do
+        a { padding '0 0.2em' }
+      end
+
       def content
 
         h1 "Chat rooms"

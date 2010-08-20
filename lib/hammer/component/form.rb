@@ -5,7 +5,7 @@ module Hammer::Component::Form
       needs :record
       attr_reader :record
       changing :set_value
-    end    
+    end
   end
 
   # values from form's tags are stored here. They are automatically updated when :form callback is triggered

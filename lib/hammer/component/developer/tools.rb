@@ -8,8 +8,16 @@ module Hammer::Component::Developer
     children :tool
 
     define_widget do
+      css do
+        li { list_style 'square' }
+      end
+
+      def wrapper_classes
+        super << 'container' #<< 'showgrid'
+      end
+
       def content
-        strong 'Tools:'
+        h1 'Tools'
         ul do
           li { link_to("Log").action { self.tool = Hammer::Component::Developer::Log.new } }
           li { link_to("Inspector Hammer::Core::Base").action { self.tool = inspector Hammer::Core::Base } }

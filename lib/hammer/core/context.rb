@@ -22,7 +22,7 @@ module Hammer::Core
     # @param [String] id of a {Action}
     # @return self
     def run_action(id)
-      (action = @actions[id]) && action.call      
+      (action = @actions[id]) && action.call
       self
     end
 

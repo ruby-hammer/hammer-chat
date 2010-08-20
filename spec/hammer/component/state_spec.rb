@@ -19,14 +19,14 @@ describe Hammer::Component::State do
       end
     end
 
-    it do      
+    it do
       instance.a
       instance.should_not be_changed
     end
 
     describe 'when .changing :a' do
       before do
-        klass.class_eval { changing :a }        
+        klass.class_eval { changing :a }
       end
       it do
         instance.a

@@ -78,7 +78,7 @@ module Hammer::Component::Rendering
 
   # @return [String] rendered html
   # @param [Hash] options
-  def to_html(options = {})    
+  def to_html(options = {})
     widget.to_html(options)
   end
 

@@ -11,7 +11,7 @@ module Examples
       after_initialize { @counters = []; add }
 
       changing do
-        
+
         # adds new counter
         def add
           counters << Examples::Counters::Counter.new(:collection => self)
@@ -24,7 +24,7 @@ module Examples
 
       end
 
-      define_widget :Widget, Hammer::Widget::Collection do        
+      define_widget :Widget, Hammer::Widget::Collection do
 
         def after
           link_to('Add counter').action { add }

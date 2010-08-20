@@ -1,4 +1,4 @@
-# adds hooks. it doesn't change functionality 
+# adds hooks. it doesn't change functionality
 module Erector
   class AbstractWidget
 

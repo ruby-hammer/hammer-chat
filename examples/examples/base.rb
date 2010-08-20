@@ -7,8 +7,16 @@ module Examples
     children :example
 
     define_widget do
+      css do
+        li { list_style 'square' }
+      end
+
+      def wrapper_classes
+        super << 'container' #<< 'showgrid'
+      end
+
       def content
-        strong 'Examples:'
+        h1 'Examples'
         ul do
           li { link_to("Counters").action { self.example = Examples::Counters::Base.new } }
           li { link_to("#ask").action { self.example = Examples::Ask::Base.new } }

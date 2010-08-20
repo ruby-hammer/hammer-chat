@@ -5,8 +5,16 @@ module Hammer::Component::Developer
   class Entry < Hammer::Component::Base
     attr_reader :message
     needs :message
-    define_widget :quickly do
-      text message
+
+    define_widget do
+      wrap_in :code
+      css do
+        this! { display :block }
+      end
+
+      def content
+        text message
+      end
     end
   end
 
