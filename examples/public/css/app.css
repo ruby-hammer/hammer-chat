@@ -2,25 +2,15 @@
   list-style: square;
 }
 
-.hammer-component-developer-entry-widget   {
+.hammer-component-developer-entry-widget {
   display: block;
 }
 
-.chat-message-widget .user {
-  text-align: center;
+.examples-base-widget li {
+  list-style: square;
 }
 
-.chat-message-widget   {
-  background-color: #EEE;
-  margin-bottom: 18px;
-}
-
-.chat-message_form-widget input {
-  width: 100%;
-  margin: 6px 0;
-}
-
-.chat-rooms-widget a {
+.examples-counter-widget a, .examples-counters-counter-widget a, .examples-ask-counter-widget a {
   padding: 0 0.2em;
 }
 

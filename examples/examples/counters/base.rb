@@ -24,8 +24,7 @@ module Examples
 
       end
 
-      define_widget :Widget, Hammer::Widget::Collection do
-
+      define_widget :Widget, :Collection do
         def after
           link_to('Add counter').action { add }
         end
