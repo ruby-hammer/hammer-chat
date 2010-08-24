@@ -8,7 +8,10 @@ module Hammer::Widget
     include Hammer::Widget::JQuery
     needs :session_id
 
-    #      depends_on :js, 'js/swfobject.js', 'js/FABridge.js', 'js/web_socket.js'
+    depends_on :js, 'js/swfobject.js'
+    depends_on :js, 'js/FABridge.js'
+    depends_on :js, 'js/web_socket.js'
+    
     depends_on :js, 'js/jquery-1.4.2.js'
     depends_on :js, 'js/jquery-ui-1.8.2.custom.min.js'
     depends_on :js, 'js/jquery.ba-hashchange.js'
@@ -20,11 +23,12 @@ module Hammer::Widget
     def body_content
       set_variables(@session_id)
       loading
+      div :id => 'hammer-content'
     end
 
     # overwrite to change loading page
     def loading
-      div(:class => 'loading') { img :src => 'img/loading.gif', :alt => "Loading..." }
+      div(:id => 'hammer-loading') { text 'Loading ...' }
     end
 
     def self.use_blueprint
@@ -49,7 +53,8 @@ CSSHEADERS
             :server => Hammer.config[:websocket][:server],
             :port => Hammer.config[:websocket][:port],
             :sessionId => session_id)
-        end)
+        end + "WEB_SOCKET_SWF_LOCATION = \"WebSocketMain.swf\""
+      )
     end
   end
 end
