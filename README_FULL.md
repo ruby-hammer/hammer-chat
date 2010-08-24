@@ -49,6 +49,14 @@ a basic implementation. It does not have any persistent backend, messages are li
 dropped from memory after 4 hours of inactivity. You can login in each window as different person, nick and email
 for gravatar is required.
 
+### Configuration
+
+Type
+
+    hammer --help
+
+to see available options. Options can be set on commandline or in `./confg.yml`.
+
 ## {file:docs/contribute How to Contribute}
 
 ## Discussions
@@ -57,13 +65,14 @@ are embedded with help of Google's wave. Anyone can read but to get write access
 [http://groups.google.com/group/isy-framework](http://groups.google.com/group/isy-framework) and have account
 on wave.google.com. Wave uses avatar as identification so please select one.
 
-{file:docs/wave More to get you startet with wave.}
+{file:docs/wave More to get you started with wave.}
 
 ## Links
 
 - Github: [http://github.com/ruby-hammer/hammer](http://github.com/ruby-hammer/hammer)
 - Doc: [http://ruby-hammer.github.com/hammer/](http://ruby-hammer.github.com/hammer/)
-- Pivotel Tracker: [http://www.pivotaltracker.com/projects/23639](http://www.pivotaltracker.com/projects/23639)
+- Pivotal Tracker: [http://www.pivotaltracker.com/projects/23639](http://www.pivotaltracker.com/projects/23639)
+- Blog: [http://isyruby.wordpress.com/](http://isyruby.wordpress.com/)
 - License {file:MIT-LICENSE}
 
 ## Author

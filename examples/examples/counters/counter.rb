@@ -8,12 +8,10 @@ module Examples
       needs :collection
       attr_reader :collection
 
-      # we could use ::Counter::Widget but this si much nore flexible
-      class Widget < superclass.widget_class
-
+      define_widget do
         # here we overwrite actions and to add Remove link
         def actions
-          cb.a('Remove').event(:click).action! { @collection.remove(self) }
+          link_to('Remove').action { @collection.remove(self) }
         end
       end
     end

@@ -1,19 +1,22 @@
 # encoding: UTF-8
 
 unless defined? Hammer
-  require 'pp'
-  #  require 'uuid'
+  # gems
   require 'active_support/core_ext'
   require 'active_support/basic_object'
+  require 'active_support/json'
   require 'erector'
   require 'sinatra/base'
   require 'em-websocket'
   require 'configliere'
-  require 'json/pure' # TODO require something faster
+
+  # stdlib
+  require 'pp'
+  require 'fiber'
   require 'benchmark'
-  require 'neverblock'
-  require 'hammer/config'
-  #  require 'weakref'
+
+  # hammer
+  require 'hammer/config.rb'
 
   module Hammer
 
@@ -33,9 +36,19 @@ unless defined? Hammer
       Hammer.logger.info "#{label} in %0.6f sec ~ %d req" % [time, (1/time).to_i] if req
     end
 
+    # @return [Hammer::Core::Context, nil] context where is current code running or nil when core is running outside
+    # a context
+    def self.get_context
+      return nil unless Fiber.current.respond_to? :hammer_context
+      Fiber.current.hammer_context || raise('unset context in fiber')
+    end
+
   end
 
-  require 'hammer/loader.rb'
+  require 'hammer/load.rb'
+
+  #  files = Dir.glob("#{File.expand_path(File.dirname(__FILE__))}/hammer/**/*.rb")
+  #  Hammer::Loader.new(files).load!
 
   # require 'datamapper'
   # require "#{Hammer.root}/lib/setup_db.rb"

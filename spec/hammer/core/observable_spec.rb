@@ -3,6 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Hammer::Core::Observable do
+  include HammerMocks
 
   class AObservable
     include Hammer::Core::Observable
@@ -16,17 +17,23 @@ describe Hammer::Core::Observable do
     it { should == [:a_event] }
   end
 
+  let(:observer) do
+    observer = mock(:observer)
+    observer.stub(:on_event).and_return { raise 'event called'}
+    observer.stub(:context).and_return(context_mock)
+    context_mock.stub(:schedule).and_return {|block| block.call }
+    observer
+  end
+
   describe '#add_observer' do
     describe '(:a_event, a_observer, a_method)' do
-      let(:observer) { mock(:observer, :on_event => nil) }
       before { a_observable.add_observer(:a_event, observer, :on_event) }
       it('should add observer') do
         a_observable.send(:_observers, :a_event).should include(observer)
       end
 
       describe 'when notified' do
-        before { observer.should_receive :on_event }
-        it { lambda { a_observable.notify_observers :a_event }.should_not raise_error }
+        it { lambda { a_observable.notify_observers :a_event }.should raise_error(RuntimeError, 'event called') }
       end
 
       describe 'when deleted' do
@@ -36,11 +43,11 @@ describe Hammer::Core::Observable do
     end
 
     describe '(:a_event) { raise \'called\' }' do
-      before { a_observable.add_observer(:a_event) { raise 'called' }}
+      before { a_observable.add_observer(:a_event, observer) { raise 'called' }}
       it { lambda { a_observable.notify_observers :a_event }.should raise_error(RuntimeError, 'called') }
     end
   end
 
-  
+
 
 end

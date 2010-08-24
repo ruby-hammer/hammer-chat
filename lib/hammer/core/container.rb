@@ -28,7 +28,7 @@ module Hammer::Core
     def restart_context(id, hash, connection, warn = nil)
       context = @contexts[id] = Context.new(id, self, hash)
       context.connection=(connection)
-      context.schedule(false) { context.actualize.warn(warn).send! }
+      context.schedule(false) { context.update.warn(warn).send! }
       context
     end
 
@@ -42,7 +42,7 @@ module Hammer::Core
     def drop
       Base.drop_container(self)
     end
-      
+
     # context's count
     def size
       @contexts.size

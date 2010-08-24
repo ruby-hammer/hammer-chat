@@ -1,19 +1,21 @@
 module Chat
-  class RoomForm < Hammer::Component::FormPart
+  class RoomForm < Hammer::Component::Base
 
+    include Hammer::Component::Form
     alias_method(:room, :record)
 
-    class Widget < Hammer::Component::FormPart::Widget
-      wrap_in(:span)
+    define_widget do
+      wrap_in(:div)
+
+      def wrapper_classes
+        super << 'form'
+      end
+
       def content
-        widget Hammer::Widget::FormPart::Input, :value => :name, :options =>
-            { :class => %w[ui-widget-content ui-corner-all] }
-        cb.a("Add").event(:click).form.action! {
-            if room.valid?
-              answer!(room)
-            end
-          }
-        cb.a("Cansel").event(:click).action! { answer!(nil) }
+        render Hammer::Widget::Form::Field.new :component => component, :value => :name
+
+        submit("Add").update { answer!(room) if room.valid? }
+        link_to("Cancel").action { answer!(nil) }
       end
     end
 

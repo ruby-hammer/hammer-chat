@@ -2,38 +2,40 @@
 
 module Examples
   module Form
-    class Base < Hammer::Component::FormPart
+    class Base < Hammer::Component::Base
+      include Hammer::Component::Form
 
       attr_reader :counter
-
       after_initialize { @counter = 0 }
 
-      class Widget < Hammer::Component::FormPart::Widget
-        wrap_in :div
+      define_widget do
+        def wrapper_classes
+          super << 'form'
+        end
 
         def content
-          p do
-            text 'name '
-            widget Hammer::Widget::FormPart::Input, :value => :name
-          end
-          p do
-            text 'sex '
-            widget Hammer::Widget::FormPart::Select, :value => :sex, :select_options => [nil, 'male', 'female']
-          end
-          p do
-            text 'description '
-            widget Hammer::Widget::FormPart::Textarea, :value => :description
+          render Examples::Widget::Field.new :component => component, :value => :name, :label => 'Name:'
+          render Examples::Widget::Hidden.new :component => component, :value => :hidden
+          render Examples::Widget::Password.new :component => component, :value => :password, :label => 'Password:'
+          render Examples::Widget::Select.new :component => component, :value => :sex, :label => 'Sex:',
+              :select_options => [nil, 'male', 'female']
+          render Examples::Widget::Textarea.new :component => component, :value => :description,
+              :label => 'Description:'
+
+          div :class => %w{span-21 prepend-3 last}, :style => 'height: 36px;' do
+            submit("Send for the #{counter}th time", :class => %w{clear}).update { @counter += 1 }
           end
 
-          cb.a("Send for the #{counter}th time").event(:click).form.action! { @counter += 1 }
-
-          h4 'Values:'
+          hr
+          strong 'Values:'
           ul do
-            li value(:name).inspect
-            li value(:sex).inspect
-            li value(:description).inspect
-          end          
-          
+            record.members.each do |key|
+              li "#{key}: #{value(key).inspect}"
+            end
+          end
+
+          render sub if sub
+
         end
       end
 

@@ -1,7 +1,7 @@
 ## YAML Template.
 ---
-:root_class: "Chat::Root"
-:layout_class: "AppLayout"
+:root: "Chat::Rooms"
+:layout: "Chat::Layout"
 #:websocket:
 #  :server: 192.168.15.100
 #  :host: 0.0.0.0

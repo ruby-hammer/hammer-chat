@@ -1,23 +1,59 @@
 # encoding: UTF-8
 
 module Hammer::Core
-  
+
+  module Actions
+    def initialize(id, container, hash = '')
+      super
+      @actions = {}
+    end
+
+    # creates and stores action for later evaluation
+    # @param [Component::Base] component where action will be evaluated
+    # @yield the action
+    # @return [String] uuid of the action
+    def register_action(component, &block)
+      uuid = Hammer::Core.generate_id
+      @actions[uuid] = Action.new(uuid, component, block)
+      return uuid
+    end
+
+    # evaluates action with +id+
+    # @param [String] id of a {Action}
+    # @return self
+    def run_action(id)
+      (action = @actions[id]) && action.call
+      self
+    end
+
+    private
+
+    # clears actions for components which are no longer in component tree
+    def clear_old_actions
+      # TODO remove slow iteration
+      components = root_component.all_children
+      @actions.delete_if do |key, action|
+        not components.include? action.component
+      end
+    end
+  end
+
   # represents context of user, each tab of browser has one of its own
-  class Context
+  class AbstractContext
     include Observable
     include Hammer::Config
-      
+
     observable_events :drop
 
-    attr_reader :id, :connection, :container, :hash
+    attr_reader :id, :connection, :container, :hash, :root_component
 
     # @param [String] id unique identification
     def initialize(id, container, hash = '')
       @id, @container, @hash = id, container, hash
-      @root_component = root_class.send :new, :context => self
       @queue, @message = [], {}
       self.class.no_connection_contexts << self
-      clear_actions
+
+      schedule { @root_component = root_class.new }
     end
 
     # store connection to be able to send server-side actualizations
@@ -39,7 +75,7 @@ module Hammer::Core
     # @return [Class] class of a root component
     def root_class
       @root_class ||= unless @hash == config[:core][:devel]
-        config[:root_class].to_s.constantize
+        config[:root].to_s.constantize
       else
         Hammer::Component::Developer::Tools
       end
@@ -49,12 +85,13 @@ module Hammer::Core
       root_class == Hammer::Component::Developer::Tools ? config[:core][:devel] : ''
     end
 
-    # renders actualization for the user and stores it in {#message}
-    def actualize
+    # renders update for the user and stores it in {#message}
+    # @option options [Boolean] :partial
+    def update(options = {})
+      options.merge!(:partial => true) {|_,old,_| old }
+      clear_old_actions
       Hammer.benchmark('Actualization') do
-        #          RubyProf.resume do
-        message :html => self.to_html
-        #          end
+        message (options[:partial] ? :update : :html) => self.to_html(:update => options[:partial])
       end
       self
     end
@@ -75,54 +112,21 @@ module Hammer::Core
     # @yield block scheduled into fiber_pool for delayed execution
     # @param [Boolean] restart try to restart when error?
     def schedule(restart = true, &block)
-      # TODO context queue
       @queue << block
       schedule_next(restart) unless @running
       self
     end
 
     # renders html, similar to Erector::Widget#to_html
-    def to_html
-      @root_component.to_html
-    end
-
-    # creates and stores action for later evaluation
-    # @param [Component::Base] component where action will be evaluated
-    # @yield the action
-    # @return [String] uuid of the action
-    def register_action(component, &block)
-      uuid = Hammer::Core.generate_id
-      @actions[uuid] = Action.new(uuid, component, block)
-      return uuid
-    end
-
-    # evaluates action with +id+
-    # @param [String] id of a {Action}
-    # @return self
-    def run_action(id)
-      (action = @actions[id]) && action.call
-      clear_actions
-      self
+    # @param [Hash] options
+    def to_html(options = {})
+      @root_component.to_html(options)
     end
 
     # @param [WebSocket::Connection] connection to find out by
     # @return [Context] by +connection+
     def self.by_connection(connection)
       contexts_by_connection[connection]
-    end
-
-    # processes safely block, restarts context when error occurred
-    # @yield task to execute
-    # @param [Boolean] restart try to restart when error?
-    def safely(restart = true, &block)
-      unless Base.safely(&block)
-        if restart
-          container.restart_context id, hash, connection,
-              "We are sorry but there was a error. Application is reloaded"
-        else
-          warn("Fatal error").send!
-        end
-      end
     end
 
     # @param [String] warn which will be shown to user using alert();
@@ -153,15 +157,31 @@ module Hammer::Core
 
     private
 
+    # processes safely block, restarts context when error occurred
+    # @yield task to execute
+    # @param [Boolean] restart try to restart when error?
+    def safely(restart = true, &block)
+      unless Base.safely(&block)
+        if restart
+          container.restart_context id, hash, connection,
+              "We are sorry but there was a error. Application is reloaded"
+        else
+          warn("Fatal error").send!
+        end
+      end
+    end
+
+    # sets context to fiber
+    def with_context(&block)
+      Fiber.current.hammer_context = self
+      block.call
+      Fiber.current.hammer_context = nil
+    end
+
     # @return [Hash] current message stored to {#send!}
     # @param [Hash] hash to be merged into current message
     def message(hash = {})
       @message.merge! hash
-    end
-
-    # deletes all stored {Action}-s
-    def clear_actions
-      @actions = {}
     end
 
     # schedules next block from @queue to be processed in {Base.fibers_pool}
@@ -169,21 +189,24 @@ module Hammer::Core
     def schedule_next(restart = true)
       if block = @queue.shift
         @running = block
-        Base.fibers_pool.spawn { safely(restart) { block.call; schedule_next } }
+        Base.fibers_pool.spawn do
+          with_context { safely(restart) { block.call; schedule_next } }
+        end
       else
         @running = nil
       end
     end
 
-    @contexts_by_connection = {}
     def self.contexts_by_connection
-      @contexts_by_connection
+      @contexts_by_connection ||= {}
     end
 
-    @no_connection_contexts = []
     def self.no_connection_contexts
-      @no_connection_contexts
+      @no_connection_contexts ||= []
     end
+  end
 
+  class Context < AbstractContext
+    include Actions
   end
 end

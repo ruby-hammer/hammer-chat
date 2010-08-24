@@ -3,17 +3,31 @@ module Examples
   class Base < Hammer::Component::Base
 
     attr_reader :example
+    changing { attr_writer :example  }
+    children :example
 
-    class Widget < Hammer::Widget::Base
+    define_widget do
+      css do
+        li { list_style 'square' }
+      end
+
+      def wrapper_classes
+        super << 'container' #<< 'showgrid'
+      end
+
       def content
-        strong 'Examples:'
+        h1 'Examples'
         ul do
-          li { cb.a("Counters").event(:click).action! { @example = new Examples::Counters::Base } }
-          li { cb.a("#ask").event(:click).action! { @example = new Examples::Ask::Base } }
-          li { cb.a("form").event(:click).action! { 
-              @example = new Examples::Form::Base, :record => Struct.new("Data", :name, :sex, :description).new
-            } }
-          li { cb.a("none").event(:click).action! { @example = nil } }
+          li { link_to("Counters").action { self.example = Examples::Counters::Base.new } }
+          li { link_to("#ask").action { self.example = Examples::Ask::Base.new } }
+          li do
+            link_to("Form").action do
+              self.example = Examples::Form::Base.new \
+                  :record => Struct.new("Data", :name, :sex, :password, :hidden, :description).new
+            end
+          end
+          li { link_to("passing").action { self.example = Examples::Passing::Base.new } }
+          li { link_to('none').action { self.example = nil } }
         end
         hr
 

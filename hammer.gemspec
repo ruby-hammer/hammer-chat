@@ -9,21 +9,19 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Petr Chalupa"]
-  s.date = %q{2010-07-22}
+  s.date = %q{2010-08-24}
   s.description = %q{ruby component based state-full web framework}
-  s.email = %q{ruby.hammer.framework@gmail.com}
+  s.email = %q{hammer.framework@gmail.com}
   s.executables = ["hammer-memprof", "hammer", "hammer-prof"]
   s.extra_rdoc_files = [
     "MIT-LICENSE",
      "README.md",
      "README_FULL.md",
      "docs/contribute.md",
-     "docs/discussion.md",
-     "docs/name.md",
      "docs/wave.md"
   ]
   s.files = [
-    "examples/app_layout.rb",
+    "examples/Gemfile.lock",
      "examples/config.yml",
      "examples/examples/ask/base.rb",
      "examples/examples/ask/counter.rb",
@@ -32,10 +30,39 @@ Gem::Specification.new do |s|
      "examples/examples/counters/base.rb",
      "examples/examples/counters/counter.rb",
      "examples/examples/form/base.rb",
-     "examples/loader.rb",
-     "examples/public/css/basic.css",
-     "examples/public/css/chat.css",
-     "examples/public/css/developer.css",
+     "examples/examples/layout.rb",
+     "examples/examples/passing/base.rb",
+     "examples/examples/widget.rb",
+     "examples/public/css/app.css",
+     "examples/public/css/blueprint/ie.css",
+     "examples/public/css/blueprint/plugins/buttons/icons/cross.png",
+     "examples/public/css/blueprint/plugins/buttons/icons/key.png",
+     "examples/public/css/blueprint/plugins/buttons/icons/tick.png",
+     "examples/public/css/blueprint/plugins/buttons/readme.txt",
+     "examples/public/css/blueprint/plugins/buttons/screen.css",
+     "examples/public/css/blueprint/plugins/fancy-type/readme.txt",
+     "examples/public/css/blueprint/plugins/fancy-type/screen.css",
+     "examples/public/css/blueprint/plugins/link-icons/icons/doc.png",
+     "examples/public/css/blueprint/plugins/link-icons/icons/email.png",
+     "examples/public/css/blueprint/plugins/link-icons/icons/external.png",
+     "examples/public/css/blueprint/plugins/link-icons/icons/feed.png",
+     "examples/public/css/blueprint/plugins/link-icons/icons/im.png",
+     "examples/public/css/blueprint/plugins/link-icons/icons/pdf.png",
+     "examples/public/css/blueprint/plugins/link-icons/icons/visited.png",
+     "examples/public/css/blueprint/plugins/link-icons/icons/xls.png",
+     "examples/public/css/blueprint/plugins/link-icons/readme.txt",
+     "examples/public/css/blueprint/plugins/link-icons/screen.css",
+     "examples/public/css/blueprint/plugins/rtl/readme.txt",
+     "examples/public/css/blueprint/plugins/rtl/screen.css",
+     "examples/public/css/blueprint/print.css",
+     "examples/public/css/blueprint/screen.css",
+     "examples/public/css/blueprint/src/forms.css",
+     "examples/public/css/blueprint/src/grid.css",
+     "examples/public/css/blueprint/src/grid.png",
+     "examples/public/css/blueprint/src/ie.css",
+     "examples/public/css/blueprint/src/print.css",
+     "examples/public/css/blueprint/src/reset.css",
+     "examples/public/css/blueprint/src/typography.css",
      "examples/public/css/ui-lightness/images/ui-anim_basic_16x16.gif",
      "examples/public/css/ui-lightness/images/ui-bg_diagonals-thick_18_b81900_40x40.png",
      "examples/public/css/ui-lightness/images/ui-bg_diagonals-thick_20_666666_40x40.png",
@@ -56,52 +83,79 @@ Gem::Specification.new do |s|
      "examples/public/img/loading.gif",
      "examples/public/js/FABridge.js",
      "examples/public/js/WebSocketMain.swf",
-     "examples/public/js/chat.js",
      "examples/public/js/hammer.js",
      "examples/public/js/jquery-1.4.2.js",
      "examples/public/js/jquery-1.4.2.min.js",
      "examples/public/js/jquery-ui-1.8.2.custom.min.js",
      "examples/public/js/jquery.ba-hashchange.js",
      "examples/public/js/jquery.ba-hashchange.min.js",
+     "examples/public/js/jquery.namespace.js",
      "examples/public/js/swfobject.js",
      "examples/public/js/web_socket.js",
      "lib/hammer.rb",
+     "lib/hammer/app.rb",
+     "lib/hammer/component.rb",
+     "lib/hammer/component/abstract.rb",
+     "lib/hammer/component/answering.rb",
      "lib/hammer/component/base.rb",
+     "lib/hammer/component/developer.rb",
      "lib/hammer/component/developer/gc.rb",
+     "lib/hammer/component/developer/inspection.rb",
+     "lib/hammer/component/developer/inspection/abstract.rb",
      "lib/hammer/component/developer/inspection/array.rb",
      "lib/hammer/component/developer/inspection/class.rb",
      "lib/hammer/component/developer/inspection/hash.rb",
      "lib/hammer/component/developer/inspection/module.rb",
-     "lib/hammer/component/developer/inspection/numeric.rb",
      "lib/hammer/component/developer/inspection/object.rb",
-     "lib/hammer/component/developer/inspection/string.rb",
-     "lib/hammer/component/developer/inspection/symbol.rb",
+     "lib/hammer/component/developer/inspection/simple.rb",
      "lib/hammer/component/developer/log.rb",
      "lib/hammer/component/developer/tools.rb",
-     "lib/hammer/component/form_part.rb",
+     "lib/hammer/component/form.rb",
+     "lib/hammer/component/inspection.rb",
+     "lib/hammer/component/passing.rb",
+     "lib/hammer/component/rendering.rb",
+     "lib/hammer/component/state.rb",
+     "lib/hammer/component/traversing.rb",
      "lib/hammer/config.rb",
+     "lib/hammer/core.rb",
      "lib/hammer/core/action.rb",
      "lib/hammer/core/application.rb",
-     "lib/hammer/core/application/common_logger.rb",
      "lib/hammer/core/base.rb",
+     "lib/hammer/core/common_logger.rb",
      "lib/hammer/core/container.rb",
      "lib/hammer/core/context.rb",
+     "lib/hammer/core/fiber_pool.rb",
      "lib/hammer/core/observable.rb",
      "lib/hammer/core/web_socket/connection.rb",
-     "lib/hammer/exception/exceptions.rb",
+     "lib/hammer/css.rb",
+     "lib/hammer/jquery.rb",
+     "lib/hammer/load.rb",
+     "lib/hammer/loader.rb",
      "lib/hammer/logger.rb",
+     "lib/hammer/monkey/erector.rb",
      "lib/hammer/runner.rb",
+     "lib/hammer/weak_array.rb",
+     "lib/hammer/widget.rb",
      "lib/hammer/widget/abstract.rb",
      "lib/hammer/widget/base.rb",
-     "lib/hammer/widget/callback.rb",
-     "lib/hammer/widget/collection.rb",
      "lib/hammer/widget/component.rb",
-     "lib/hammer/widget/form_part/abstract.rb",
-     "lib/hammer/widget/form_part/input.rb",
-     "lib/hammer/widget/form_part/select.rb",
-     "lib/hammer/widget/form_part/textarea.rb",
+     "lib/hammer/widget/css.rb",
+     "lib/hammer/widget/element_builder.rb",
+     "lib/hammer/widget/form.rb",
+     "lib/hammer/widget/form/abstract.rb",
+     "lib/hammer/widget/form/field.rb",
+     "lib/hammer/widget/form/hidden.rb",
+     "lib/hammer/widget/form/password.rb",
+     "lib/hammer/widget/form/select.rb",
+     "lib/hammer/widget/form/textarea.rb",
+     "lib/hammer/widget/helper.rb",
+     "lib/hammer/widget/helper/link_to.rb",
+     "lib/hammer/widget/helper/submit.rb",
+     "lib/hammer/widget/jquery.rb",
      "lib/hammer/widget/layout.rb",
      "lib/hammer/widget/optionable_collection.rb",
+     "lib/hammer/widget/passing.rb",
+     "lib/hammer/widget/state.rb",
      "lib/hammer/widget/wrapping.rb"
   ]
   s.rdoc_options = ["--charset=UTF-8"]
@@ -110,19 +164,28 @@ Gem::Specification.new do |s|
   s.summary = %q{ruby component based state-full web framework}
   s.test_files = [
     "spec/hammer/widget/component_spec.rb",
+     "spec/hammer/widget/state_spec.rb",
      "spec/hammer/widget/base_spec.rb",
-     "spec/hammer/widget/callback_spec.rb",
-     "spec/hammer/component/form_part_spec.rb",
+     "spec/hammer/widget/passing_spec.rb",
+     "spec/hammer/widget/wrapping_spec.rb",
+     "spec/hammer/weak_array_test.rb",
+     "spec/hammer/jquery_spec.rb",
+     "spec/hammer/weak_array_spec.rb",
+     "spec/hammer/component/state_spec.rb",
      "spec/hammer/component/base_spec.rb",
      "spec/hammer/component/developer/inspection/array_spec.rb",
      "spec/hammer/component/developer/inspection/object_spec.rb",
+     "spec/hammer/component/form_spec.rb",
      "spec/hammer/core/application_spec.rb",
      "spec/hammer/core/base_spec.rb",
      "spec/hammer/core/container_spec.rb",
      "spec/hammer/core/context_spec.rb",
      "spec/hammer/core/observable_spec.rb",
+     "spec/hammer/css_spec.rb",
+     "spec/hammer/loader_spec.rb",
      "spec/spec_helper.rb",
-     "spec/benchmark/rendering_spec.rb"
+     "spec/benchmark/rendering_spec.rb",
+     "spec/benchmark/hash_spec.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -130,7 +193,6 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<uuid>, [">= 0"])
       s.add_runtime_dependency(%q<tzinfo>, [">= 0"])
       s.add_runtime_dependency(%q<i18n>, [">= 0"])
       s.add_runtime_dependency(%q<activesupport>, [">= 3.0.0.beta"])
@@ -139,7 +201,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<thin>, [">= 0"])
       s.add_runtime_dependency(%q<em-websocket>, [">= 0"])
       s.add_runtime_dependency(%q<configliere>, [">= 0"])
-      s.add_runtime_dependency(%q<neverblock>, [">= 0"])
       s.add_runtime_dependency(%q<bundler>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 2.0.0.beta"])
       s.add_development_dependency(%q<yard>, [">= 0"])
@@ -147,7 +208,6 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<rack-test>, [">= 0"])
     else
-      s.add_dependency(%q<uuid>, [">= 0"])
       s.add_dependency(%q<tzinfo>, [">= 0"])
       s.add_dependency(%q<i18n>, [">= 0"])
       s.add_dependency(%q<activesupport>, [">= 3.0.0.beta"])
@@ -156,7 +216,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<thin>, [">= 0"])
       s.add_dependency(%q<em-websocket>, [">= 0"])
       s.add_dependency(%q<configliere>, [">= 0"])
-      s.add_dependency(%q<neverblock>, [">= 0"])
       s.add_dependency(%q<bundler>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 2.0.0.beta"])
       s.add_dependency(%q<yard>, [">= 0"])
@@ -165,7 +224,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rack-test>, [">= 0"])
     end
   else
-    s.add_dependency(%q<uuid>, [">= 0"])
     s.add_dependency(%q<tzinfo>, [">= 0"])
     s.add_dependency(%q<i18n>, [">= 0"])
     s.add_dependency(%q<activesupport>, [">= 3.0.0.beta"])
@@ -174,7 +232,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<thin>, [">= 0"])
     s.add_dependency(%q<em-websocket>, [">= 0"])
     s.add_dependency(%q<configliere>, [">= 0"])
-    s.add_dependency(%q<neverblock>, [">= 0"])
     s.add_dependency(%q<bundler>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 2.0.0.beta"])
     s.add_dependency(%q<yard>, [">= 0"])

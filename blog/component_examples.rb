@@ -8,18 +8,18 @@ class Articles # descendant of a Component
 
   # form for new article or editing one
   attr_reader :form
-  
+
   class Widget < ::Widget
 
     # Erector's method. Place where all rendering starts in Widget.
-    def content      
+    def content
       # if form is set, it's rendered. #component returns Articles' instance
       widget component.form if component.form
       # renders the articles' list
       render_articles
       # renders link to 'Create new article'
       link_to 'Create new article' do
-        # this block is evaluated inside Articles' instance 
+        # this block is evaluated inside Articles' instance
         # when link 'Create new article' is clicked
         self.form = ask ArticleForm.new(articles_component, Article.new) do |answer|
           # this block is evaluated inside Articles' instance
@@ -48,13 +48,13 @@ class Component
     @asker, @askers_callback = to_whom, block
   end
 
-  def answer!(answer)    
+  def answer!(answer)
     @asker.instance_exec answer, &@askers_callback
   end
 end
 
 class ArticleForm # descendant of a Component
-  
+
   def initialize(parent, article)
     super(parent)
     @article = article
@@ -127,5 +127,5 @@ class Hammer::Component
     end
   end
 
-  
+
 end

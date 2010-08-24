@@ -28,7 +28,7 @@ describe Hammer::Core::Container do
       Hammer::Core::Context.
           should_receive(:new).
           with(@context1.id, container, @context1.hash).
-          and_return(@context2 = 
+          and_return(@context2 =
             mock(:restarted_content, :id => @context1.id, :container => container, :hash => @context1.hash))
       @context2.should_receive(:connection=).with(@context1.connection)
       @context2.stub(:connection).and_return(@context1.connection)
@@ -58,13 +58,13 @@ describe Hammer::Core::Container do
       describe 'when second dropped' do
         before do
           container.should_receive :drop
-          container.drop_context(@context2) 
+          container.drop_context(@context2)
         end
         it { container.instance_variable_get(:@contexts).should be_empty }
       end
     end
   end
 
-  
+
 
 end

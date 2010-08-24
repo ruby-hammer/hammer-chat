@@ -3,6 +3,7 @@ module Hammer::Component::Developer::Inspection
 
     needs :packed => true
     attr_reader :components
+    children :components
 
     # @option assigns [String] :label optional description
     # @option assigns [Boolean] :packed inspector is initially packed?
@@ -23,6 +24,8 @@ module Hammer::Component::Developer::Inspection
       packed? ? pack : unpack
     end
 
+    changing :toggle!
+
     protected
 
     # unpacks inspector, creates subinspectors for instance variables, constants etc.
@@ -36,7 +39,7 @@ module Hammer::Component::Developer::Inspection
       @components = []
     end
 
-    class Widget < Abstract::Widget
+    define_widget do
       def content
         packed
         ul { unpacked } unless packed?
@@ -44,7 +47,7 @@ module Hammer::Component::Developer::Inspection
 
       # renders packed form
       def packed
-        cb.a("#{component_label}#{name}").event(:click).action! { toggle! }
+        link_to("#{component_label}#{name}").action { toggle! }
       end
 
       # renders name of the inspector

@@ -5,23 +5,28 @@ module Examples
 
       attr_reader :counters
       alias_method :collection, :counters
+      children :counters
 
       # defines the state after new instance is created
       after_initialize { @counters = []; add }
 
-      # adds new counter
-      def add
-        counters << new(Examples::Counters::Counter, :collection => self)
+      changing do
+
+        # adds new counter
+        def add
+          counters << Examples::Counters::Counter.new(:collection => self)
+        end
+
+        # removes a +counter+
+        def remove(counter)
+          counters.delete(counter)
+        end
+
       end
 
-      # removes a +counter+
-      def remove(counter)
-        counters.delete(counter)
-      end
-
-      class Widget < Hammer::Widget::Collection
+      define_widget :Widget, :Collection do
         def after
-          cb.a('Add counter').event(:click).action! { add }
+          link_to('Add counter').action { add }
         end
       end
 

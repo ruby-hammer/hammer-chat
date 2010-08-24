@@ -24,12 +24,18 @@ module Hammer::Component
       super
     end
 
-    # {Base} factory method, it adds proper {Core::Context} automatically
+    # adds proper {Core::Context} automatically
     # @param [Hash] assigns are passed to +klass+.new
-    # @param [Class] klass which is used to create new {Base} instance
-    def new(klass, assigns = {})
-      check_assigns(assigns)
-      klass.send :new, assigns.merge({:context => context})
+    def self.new(assigns = {})
+      assigns[:context] ||= Hammer.get_context || raise('trying to create outside Fiber')
+      super assigns
+    end
+
+    # registers action to #component for later evaluation
+    # @yield action block to register
+    # @return [String] uuid of the action
+    def register_action(&block)
+      context.register_action(self, &block)
     end
 
     private

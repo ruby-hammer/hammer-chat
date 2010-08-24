@@ -3,14 +3,14 @@ module Examples
   module Ask
     class Counter < Examples::Counter
 
-      class Widget < superclass.widget_class
+      define_widget do
 
         # adds links to answer the number (counter) or
         # to answer nothing.
         # Everything else is as we need.
         def actions
-          cb.a('Add number').event(:click).action! { answer!(counter) }
-          cb.a('Cancel').event(:click).action! { answer! }
+          link_to('Add number').action { answer!(counter) }
+          link_to('Cancel').action { answer! }
         end
       end
     end

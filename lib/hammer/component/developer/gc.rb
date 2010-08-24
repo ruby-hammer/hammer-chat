@@ -3,16 +3,16 @@
 module Hammer::Component::Developer
   class Gc < Hammer::Component::Base
 
-    class Widget < Hammer::Widget::Base
+    define_widget do
       def content
         stats
         gc
       end
 
       def stats
-        h1 'Stats'
+        h2 'Stats'
         ul do
-          classes = [ 
+          classes = [
             Hammer::Core::Container,
             Hammer::Core::Context,
             Hammer::Widget::Base,
@@ -26,23 +26,24 @@ module Hammer::Component::Developer
       end
 
       def gc
-        h1 'GC'
+        h2 'GC'
         ul do
           li do
-            cb.a("GC::Profiler.enable? => #{GC::Profiler.enabled?}").event(:click).action! {
+            link_to("GC::Profiler.enable? => #{GC::Profiler.enabled?}").action do
               if GC::Profiler.enabled?
                 GC::Profiler.disable
                 GC::Profiler.clear
               else
                 GC::Profiler.enable
               end
-            }
+              change!
+            end
           end if Hammer.v19?
-          li { cb.a("GC.start").event(:click).action! { ObjectSpace.garbage_collect; ObjectSpace.garbage_collect }}
+          li { link_to("GC.start").action { ObjectSpace.garbage_collect; change! } }
         end
 
         pre { code GC::Profiler.result } if Hammer.v19?
-        pre { code ObjectSpace.count_objects.to_s } if Hammer.v19?
+        p { code ObjectSpace.count_objects.to_s } if Hammer.v19?
       end
     end
 

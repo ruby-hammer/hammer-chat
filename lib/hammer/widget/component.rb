@@ -4,8 +4,9 @@ module Hammer::Widget::Component
 
   def self.included(base)
     base.class_eval do
-      needs :component
+      needs :component, :root_widget => false
       attr_reader :component
+      wrap_in :div
     end
   end
 
@@ -31,13 +32,18 @@ module Hammer::Widget::Component
   def respond_to?(symbol, include_private = false)
     component.respond_to?(symbol) || super
   end
-  
-  private
 
-  # registers action to #component for later evaluation
-  # @yield action block to register
-  # @return [String] uuid of the action
-  def register_action(&block)
-    component.context.register_action(component, &block)
+  def root_widget?
+    @root_widget
+  end
+
+  def wrapper_options
+    return super unless root_widget?
+    super.merge :id => component.object_id
+  end
+
+  def wrapper_classes
+    return super unless root_widget?
+    super << 'component'
   end
 end

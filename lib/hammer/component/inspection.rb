@@ -1,6 +1,6 @@
 module Hammer::Component::Inspection
   def inspector(obj, options = {})
-    new inspector_class(obj.class), options.merge(:obj => obj)
+    inspector_class(obj.class).new options.merge(:obj => obj)
   end
 
   private

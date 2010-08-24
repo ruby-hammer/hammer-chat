@@ -15,7 +15,7 @@ describe 'Rendering Benchmar' do
 
   it do
     puts(Benchmark.measure do
-        1000.times { $out = @context.to_html }
+        5_000.times { $out = @context.to_html }
       end)
     puts $out
   end
@@ -40,13 +40,9 @@ describe 'Rendering Benchmar' do
     end
   end
 
-  # jsonify callbacks 10_000.times
+  # callbacks 5_000
   # Rendering Benchmar
-  #   15.510000   0.050000  15.560000 ( 15.615398)
-
-  # callbacks
-  # Rendering Benchmar
-  #   14.520000   0.040000  14.560000 ( 15.262684)
+  #   9.210000   5.160000  14.370000 ( 14.442743)
 
 
 end
