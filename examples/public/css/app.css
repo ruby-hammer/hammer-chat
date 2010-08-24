@@ -1,9 +1,13 @@
-.hammer-component-developer-entry-widget {
-  display: block;
+.examples-widget-textarea div {
+  height: 36px;
 }
 
-.hammer-component-developer-tools-widget li {
-  list-style: square;
+.examples-widget-textarea div {
+  height: 90px;
+}
+
+.examples-widget-textarea textarea {
+  height: 66px;
 }
 
 .examples-widget-field div {
@@ -18,23 +22,19 @@
   height: 36px;
 }
 
-.examples-widget-textarea div {
-  height: 36px;
-}
-
-.examples-widget-textarea div {
-  height: 90px;
-}
-
-.examples-widget-textarea textarea {
-  height: 66px;
-}
-
-.examples-counter-widget a, .examples-ask-counter-widget a, .examples-counters-counter-widget a {
+.examples-counter-widget a, .examples-counters-counter-widget a, .examples-ask-counter-widget a {
   padding: 0 0.2em;
 }
 
 .examples-base-widget li {
+  list-style: square;
+}
+
+.hammer-component-developer-entry-widget {
+  display: block;
+}
+
+.hammer-component-developer-tools-widget li {
   list-style: square;
 }
 

@@ -23,11 +23,12 @@ module Hammer::Widget
     def body_content
       set_variables(@session_id)
       loading
+      div :id => 'hammer-content'
     end
 
     # overwrite to change loading page
     def loading
-      div(:class => 'loading') { img :src => 'img/loading.gif', :alt => "Loading..." }
+      div(:id => 'hammer-loading') { text 'Loading ...' }
     end
 
     def self.use_blueprint
@@ -52,7 +53,7 @@ CSSHEADERS
             :server => Hammer.config[:websocket][:server],
             :port => Hammer.config[:websocket][:port],
             :sessionId => session_id)
-        end + "WEB_SOCKET_SWF_LOCATION = \"WebSocketMain.swf\"; WEB_SOCKET_DEBUG = true;"
+        end + "WEB_SOCKET_SWF_LOCATION = \"WebSocketMain.swf\""
       )
     end
   end

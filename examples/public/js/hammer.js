@@ -21,23 +21,30 @@
 
   var logger = {
     error:  function(message) {
-      console.error(message);
-    //    if(hammer.sendLogBack == true) new Hammer.Log('error', message).send();
+      this._add('error', message)
     },
 
     warn:  function(message) {
-      console.warn(message);
-    //    if(hammer.sendLogBack == true) new Hammer.Log('warn', message).send();
+      this._add('warn', message)
     },
 
     info:  function(message) {
-      console.info(message);
-    //    if(hammer.sendLogBack == true) new Hammer.Log('info', message).send();
+      this._add('debug', message)
     },
 
     debug:  function(message) {
-      console.debug(message);
-    //    if(hammer.sendLogBack == true) new Hammer.Log('debug', message).send();
+      this._add('debug', message, 'log')
+    },
+
+    _add: function(level, message, alternative) {
+      if (console && console[level]) {
+          console[level](message);
+      } else if (console && alternative && console[alternative]) {
+        console[alternative](message);
+      } else {
+        alert(message);
+      }
+      //    if(hammer.sendLogBack == true) new Hammer.Log('debug', message).send();
     }
   };
 
@@ -48,15 +55,15 @@
 
   var reciever = {
     execute: function(json) {
-      if (json.html) this.replaceBody(json.html);
+      if (json.html) this.replaceContent(json.html);
       if (json.js) this.evalJs(json.js);
       if (json.context_id) this.setContextId(json.context_id);
       if (json.update) this.update(json.update);
     //    if (this.json.hash) this._setHash();
     },
 
-    replaceBody: function(html) {
-      $("body").html(html);
+    replaceContent: function(html) {
+      $("#hammer-content").html(html);
       $('body').trigger('hammer.update') // FIXME trigger global event
     },
 
@@ -103,7 +110,7 @@
         if (place.length > 0) {
           place.replaceWith(element);
         } else {
-          $('body').html(element);
+          $("#hammer-content").html(element);
         }
       });
     }
@@ -135,7 +142,8 @@
 
         this.websocket.onopen = function() {
           logger.debug("WebSocket connected...");
-          hammer.requestContent();
+          $('#hammer-loading').remove();
+          hammer.requestContent();          
         };
       }
     },
