@@ -3,6 +3,6 @@ module Hammer::Component
   class MissingWidgetClass < ComponentException; end
 
   def self.all
-    Hammer::Component::Base.all_sub_classes
+    Hammer::Component::Base.descendants
   end
 end

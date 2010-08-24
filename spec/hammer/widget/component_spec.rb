@@ -1,7 +1,6 @@
-# encoding: UTF-8
+# encoding: UTF-8 FIXME remove all
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-
 
 describe Hammer::Widget::Component do
 

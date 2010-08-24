@@ -20,7 +20,7 @@ module Chat
 
       def content
         div :class => %w{span-22}, :style => 'height: 36px;' do
-          input :name => :text, :value => value(:text), :type => :text
+          render Hammer::Widget::Form::Field.new :component => component, :value => :text
         end
         div :class => %w{span-2 last}, :style => 'height: 36px;' do
           submit("Send").update do

@@ -12,7 +12,7 @@ module Chat
       end
 
       def content
-        input :name => :name, :value => value(:name), :type => :text
+        render Hammer::Widget::Form::Field.new :component => component, :value => :name
 
         submit("Add").update { answer!(room) if room.valid? }
         link_to("Cancel").action { answer!(nil) }

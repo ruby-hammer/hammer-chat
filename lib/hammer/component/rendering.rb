@@ -102,7 +102,7 @@ module Hammer::Component::Rendering
 
   # always pass component to widget, can be extended by overwritten
   def widget_assigns
-    {:component => self}
+    { :component => self, :root_widget => true }
   end
 
 end

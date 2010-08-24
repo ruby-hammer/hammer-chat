@@ -3,9 +3,10 @@
 module Hammer::Widget
 
   class Base < Abstract
-    include Hammer::SubClasses
     include Wrapping
     include Component
+    include State
+    include Passing
     # include Hammer::Widget::ElementBuilder
     include JQuery
     include CSS
