@@ -52,7 +52,7 @@ CSSHEADERS
             :server => Hammer.config[:websocket][:server],
             :port => Hammer.config[:websocket][:port],
             :sessionId => session_id)
-        end + "WEB_SOCKET_SWF_LOCATION = \"js/WebSocketMain.swf\"; WEB_SOCKET_DEBUG = true;"
+        end + "WEB_SOCKET_SWF_LOCATION = \"WebSocketMain.swf\"; WEB_SOCKET_DEBUG = true;"
       )
     end
   end

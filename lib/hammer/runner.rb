@@ -10,7 +10,7 @@ module Hammer::Runner
       #          encoding
       load_app_files
       generate_css
-      Core::Base.run!
+      Hammer::Core::Base.run!
       setup_application
       Hammer.logger.info "== Settings\n" + config.pretty_inspect
       Hammer.logger.level = config[:logger][:level]
@@ -18,7 +18,7 @@ module Hammer::Runner
       #          require 'irb'
       #          Thread.new { IRB.start }
       #        end
-      Core::Application.run!
+      Hammer::Core::Application.run!
     end
 
     def load_app_files
@@ -36,7 +36,7 @@ module Hammer::Runner
     private
 
     def setup_application
-      Core::Application.set \
+      Hammer::Core::Application.set \
           :root => Dir.pwd,
           :host => config[:web][:host],
           :port => config[:web][:port],
