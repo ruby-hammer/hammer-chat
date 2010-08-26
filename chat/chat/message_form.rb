@@ -4,6 +4,13 @@ module Chat
     include Hammer::Component::Form
     alias_method(:message, :record)
 
+    on_submit do
+      if message.valid?
+        message.time!
+        answer!(message)
+      end
+    end
+
     define_widget do
       wrap_in :div
 
@@ -23,12 +30,7 @@ module Chat
           render Hammer::Widget::Form::Field.new :component => component, :value => :text
         end
         div :class => %w{span-2 last}, :style => 'height: 36px;' do
-          submit("Send").update do
-            if message.valid?
-              message.time!
-              answer!(message)
-            end
-          end
+          input :type => :submit, :value => "Send"
         end
       end
     end

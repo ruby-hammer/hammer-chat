@@ -5,6 +5,7 @@ module Chat
 
     include Hammer::Component::Form
     alias_method(:user, :record)
+    on_submit { answer!(user) if user.valid? }
 
     define_widget do
       wrap_in :div
@@ -19,7 +20,7 @@ module Chat
         render Chat::Widget::Field.new :component => component, :value => :email, :label => 'Gravatar email:'
 
         div :class => %w{span-21 prepend-3 last}, :style => 'height: 36px;' do
-          submit("Log in").update { answer!(user) if user.valid? }
+          input :type => :submit, :value => "Log in"
         end
       end
     end

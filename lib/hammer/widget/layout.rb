@@ -13,11 +13,10 @@ module Hammer::Widget
     depends_on :js, 'js/web_socket.js'
     
     depends_on :js, 'js/jquery-1.4.2.js'
-    depends_on :js, 'js/jquery-ui-1.8.2.custom.min.js'
     depends_on :js, 'js/jquery.ba-hashchange.js'
-    depends_on :js, 'js/jquery.namespace.js'
+    depends_on :js, 'js/jquery-no_conflict.js'
+    depends_on :js, 'js/right.js'
     depends_on :js, 'js/hammer.js'
-
     depends_on :css,'css/app.css'
 
     def body_content
@@ -49,7 +48,7 @@ CSSHEADERS
     # sets configuration
     def set_variables(session_id)
       javascript(jquery do
-          jQuery!.hammer.setSettings(
+          call(:Hammer).setOptions(
             :server => Hammer.config[:websocket][:server],
             :port => Hammer.config[:websocket][:port],
             :sessionId => session_id)

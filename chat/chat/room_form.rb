@@ -3,6 +3,7 @@ module Chat
 
     include Hammer::Component::Form
     alias_method(:room, :record)
+    on_submit { answer!(room) if room.valid? }
 
     define_widget do
       wrap_in(:div)
@@ -14,7 +15,7 @@ module Chat
       def content
         render Hammer::Widget::Form::Field.new :component => component, :value => :name
 
-        submit("Add").update { answer!(room) if room.valid? }
+        input :type => :submit, :value => "Add"
         link_to("Cancel").action { answer!(nil) }
       end
     end
