@@ -1,0 +1,6 @@
+## YAML Template.
+---
+:root: "Examples::Base"
+:layout: "Examples::Layout"
+:app:
+  :name: "NoName"
