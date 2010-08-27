@@ -17,8 +17,9 @@ module Hammer
             use :define, :config_file, :commandline, :config_block
 
             [
-
               # name                    type      default       description
+              [ 'app_name',             String,   nil,          "application name" ],
+
               [ 'web.host',             String,   '127.0.0.1',  "web-server's device to bind" ],
               [ 'web.port',             Integer,  3000,         "web-server's port" ],
 

@@ -2,3 +2,4 @@
 ---
 :root: "Examples::Base"
 :layout: "Examples::Layout"
+:app_name: "Examples"

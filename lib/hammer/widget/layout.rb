@@ -17,7 +17,7 @@ module Hammer::Widget
     depends_on :js, 'js/jquery-no_conflict.js'
     depends_on :js, 'js/right.js'
     depends_on :js, 'js/hammer.js'
-    depends_on :css,'css/app.css'
+    depends_on :css,"css/#{Hammer.config[:app_name].underscore}.css"
 
     def body_content
       set_variables(@session_id)

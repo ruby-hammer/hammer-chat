@@ -27,7 +27,7 @@ module Hammer::Runner
 
     def generate_css
       Hammer.benchmark('css generated', false) do
-        File.open('./public/css/app.css', 'w') do |file|
+        File.open("./public/css/#{config[:app_name].underscore}.css", 'w') do |file|
           file.write Hammer::Widget::CSS.css
         end
       end
