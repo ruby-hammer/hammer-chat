@@ -16,14 +16,6 @@
   margin: 6px 0;
 }
 
-.chat-widget-field div {
-  height: 36px;
-}
-
-.chat-widget-select div {
-  height: 36px;
-}
-
 .chat-widget-password div {
   height: 36px;
 }
@@ -38,6 +30,14 @@
 
 .chat-widget-textarea textarea {
   height: 66px;
+}
+
+.chat-widget-field div {
+  height: 36px;
+}
+
+.chat-widget-select div {
+  height: 36px;
 }
 
 .hammer-component-developer-entry-widget {
