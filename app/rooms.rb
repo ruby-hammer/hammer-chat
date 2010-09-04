@@ -3,7 +3,6 @@ module Chat
 
     attr_reader :room, :user, :room_form
     changing { attr_writer :room_form, :room  }
-    children :room, :room_form
 
     after_initialize do
       pass_on ask(Login.new(:record => Model::User.new)) { |user|
@@ -19,7 +18,7 @@ module Chat
 
     def rooms_changed(room)
       change!
-      context.update.send!
+      context.new_message.collect_updates.send!
     end
 
     def context_dropped(context)

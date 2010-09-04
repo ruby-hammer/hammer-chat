@@ -4,7 +4,6 @@ module Chat
     needs :room, :user
     attr_reader :room, :user, :message_form, :messages
     changing { attr_writer :message_form }
-    children :message_form, :messages
 
     after_initialize do
       ask_message
@@ -23,7 +22,7 @@ module Chat
 
     def new_message(message)
       add_message message
-      context.update.send!
+      context.new_message.collect_updates.send!
     end
 
     def deleted_message(message)
