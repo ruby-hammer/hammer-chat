@@ -3,7 +3,7 @@ module Chat
     needs :message
     attr_reader :message
 
-    define_widget do
+    class Widget < widget_class :Widget
       require 'gravatarify'
       include Gravatarify::Helper
 

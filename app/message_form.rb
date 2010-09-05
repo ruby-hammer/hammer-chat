@@ -11,9 +11,7 @@ module Chat
       end
     end
 
-    define_widget do
-      wrap_in :div
-
+    class Widget < widget_class :Widget
       def wrapper_classes
         super << 'form'
       end

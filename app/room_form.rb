@@ -5,9 +5,7 @@ module Chat
     alias_method(:room, :record)
     on_submit { answer!(room) if room.valid? }
 
-    define_widget do
-      wrap_in(:div)
-
+    class Widget < widget_class :Widget
       def wrapper_classes
         super << 'form'
       end

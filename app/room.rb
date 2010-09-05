@@ -52,10 +52,12 @@ module Chat
       end
     end
 
-    define_widget :quickly do
-      h2 room.name
-      render message_form
-      messages.each {|m| render m }
+    class Widget < widget_class :Widget
+      def content
+        h2 room.name
+        render message_form
+        messages.each {|m| render m }
+      end
     end
   end
 end
