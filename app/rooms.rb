@@ -12,19 +12,12 @@ module Chat
 
         Chat::Model::Rooms.instance.add_observer(:new, self, :rooms_changed)
         Chat::Model::Rooms.instance.add_observer(:deleted, self, :rooms_changed)
-        context.add_observer(:drop, self, :context_dropped)
       }
     end
 
     def rooms_changed(room)
       change!
       context.new_message.collect_updates.send!
-    end
-
-    def context_dropped(context)
-      Chat::Model::Rooms.instance.delete_observer :new, self
-      Chat::Model::Rooms.instance.delete_observer :deleted, self
-      context.delete_observer :drop, self
     end
 
     class Widget < widget_class :Widget

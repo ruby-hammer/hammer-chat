@@ -11,13 +11,11 @@ module Chat
       room.messages.each {|m| add_message(m) }
       room.add_observer(:new, self, :new_message)
       room.add_observer(:deleted, self, :deleted_message)
-      context.add_observer(:drop, self, :context_dropped)
     end
 
     def leave!
       room.delete_observer :new, self
       room.delete_observer :deleted, self
-      context.delete_observer :drop, self
     end
 
     def new_message(message)
@@ -27,10 +25,6 @@ module Chat
 
     def deleted_message(message)
       remove_message(message)
-    end
-
-    def context_dropped(context)
-      leave!
     end
 
     private
@@ -53,8 +47,13 @@ module Chat
     end
 
     class Widget < widget_class :Widget
+      include Gravatarify::Helper
+      
       def content
         h2 room.name
+        component.room.get_observers(:new).each do |room|
+          img :src => gravatar_url(room.user.email, :size => 38, :default => :wavatar), :alt => 'avatar'
+        end
         render message_form
         messages.each {|m| render m }
       end

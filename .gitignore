@@ -11,3 +11,4 @@ pkg
 profile.html
 profile.txt
 Gemfile.lock
+memprof*.json
