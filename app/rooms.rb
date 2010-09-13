@@ -1,26 +1,49 @@
 module Chat
   class Rooms < Hammer::Component::Base
 
-    attr_reader :room, :user, :room_form
+    attr_reader :room, :room_form
     changing { attr_writer :room_form, :room  }
+    shared :user, :user=
 
     after_initialize do
-      pass_on ask(Login.new(:record => Model::User.new)) { |user|
-        @user = user
-        File.open('users.log', 'a') { |f| f.write "#{@user.nick}\t#{@user.email}\n"  }
-        retake_control!
+      shared.add_observer(:user_changed, self) do
+        user_changed
+      end
+      user_changed
+    end
 
-        Chat::Model::Rooms.instance.add_observer(:new, self, :rooms_changed)
-        Chat::Model::Rooms.instance.add_observer(:deleted, self, :rooms_changed)
-      }
+    def user_changed
+      unless user
+        logout
+        pass_on ask(Login.new(:record => Model::User.new)) { |user|
+          File.open('users.log', 'a') { |f| f.write "#{user.nick}\t#{user.email}\n"  }
+          self.user = user
+        }
+      else
+        login
+      end
+      change!
     end
 
     def rooms_changed(room)
       change!
-      context.new_message.collect_updates.send!
+    end
+
+    private
+
+    def login
+      retake_control!
+      Chat::Model::Rooms.instance.add_observer(:new, self, :rooms_changed)
+      Chat::Model::Rooms.instance.add_observer(:deleted, self, :rooms_changed)
+    end
+
+    def logout
+      Chat::Model::Rooms.instance.delete_observer(:new, self)
+      Chat::Model::Rooms.instance.delete_observer(:deleted, self)
     end
 
     class Widget < widget_class :Widget
+
       def wrapper_classes
         super << 'container'# << 'showgrid'
       end
@@ -41,7 +64,7 @@ module Chat
         end
 
         unless room_form
-          link_to('new room').action do
+          link_to('New room').action do
             self.room_form = ask Chat::RoomForm.new(:record => Chat::Model::Room.new) do |room|
               Chat::Model::Rooms.instance.add_room(room) if room
               self.room_form = nil
@@ -49,6 +72,10 @@ module Chat
           end
         else
           render room_form
+        end
+
+        link_to('Logout').action do
+          self.user = nil
         end
 
         render room if room
