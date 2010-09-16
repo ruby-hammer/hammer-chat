@@ -6,15 +6,14 @@ module Chat
     on_submit { answer!(room) if room.valid? }
 
     class Widget < widget_class :Widget
-      def wrapper_classes
-        super << 'form'
-      end
-
       def content
-        render Hammer::Widget::Form::Field.new :component => component, :value => :name
+        render Chat::Widget::Field.new :component => component, :value => :name, :label => 'Name: '
 
-        input :type => :submit, :value => "Add"
-        link_to("Cancel").action { answer!(nil) }
+        div :class => %w{prefix_2 grid_2} do
+          input :type => :submit, :value => "Add"
+          link_to("Cancel").action { answer!(nil) }
+        end
+        div :class => 'clear'
       end
     end
 

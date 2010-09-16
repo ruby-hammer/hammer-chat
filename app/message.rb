@@ -8,31 +8,24 @@ module Chat
       include Gravatarify::Helper
 
       css do
-        class!(:user) { text_align 'center' }
-        this! {
-          background_color '#EEE'
-          margin_bottom '18px'
-        }
-      end
-
-      def wrapper_classes
-        super << 'span-24'
+        img { margin_bottom '18px' }
+        class!(:message) do
+          margin_left '-5px'
+          width '895px'
+        end
       end
 
       def content
-        div :class => %w{span-1} do
-          img :src => gravatar_url(message.user.email, :size => 38, :default => :wavatar), :alt => 'avatar'
+        div :class => %w{grid_1} do
+          img :src => gravatar_url(message.user.email, :size => 36, :default => :wavatar), :alt => 'avatar'
         end
 
-        div :class => %w{span-2 user} do
-          strong "#{message.user}"
-          br
-          text message.time.strftime('%H:%M:%S')
-        end
-
-        div :class => %w{span-21 last} do
+        p :class => %w{grid_15 message} do
+          strong message.user
+          text " - #{message.time.strftime('%H:%M:%S')}:"; br
           text "#{message.text}"
         end
+        div :class => 'clear'
       end
     end
   end

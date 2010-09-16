@@ -44,39 +44,39 @@ module Chat
 
     class Widget < widget_class :Widget
 
-      def wrapper_classes
-        super << 'container'# << 'showgrid'
-      end
-
       css do
         a { padding '0 0.2em' }
       end
 
-      def content
+      def content        
+        h1 "Chat rooms", :class => 'grid_16'
+        p :class => 'grid_16' do
 
-        h1 "Chat rooms"
-
-        Model::Rooms.instance.rooms.each do |r|
-          link_to("#{r.name}").action do
-            self.room.try :leave!
-            self.room = Chat::Room.new :room => r, :user => user
-          end
-        end
-
-        unless room_form
-          link_to('New room').action do
-            self.room_form = ask Chat::RoomForm.new(:record => Chat::Model::Room.new) do |room|
-              Chat::Model::Rooms.instance.add_room(room) if room
-              self.room_form = nil
+          Model::Rooms.instance.rooms.each do |r|
+            link_to("#{r.name}").action do
+              self.room.try :leave!
+              self.room = Chat::Room.new :room => r, :user => user
             end
           end
-        else
-          render room_form
-        end
 
-        link_to('Logout').action do
-          self.user = nil
+          link_to('Logout').action do
+            self.user = nil
+          end
+
+          unless room_form
+            link_to('New room').action do
+              self.room_form = ask Chat::RoomForm.new(:record => Chat::Model::Room.new) do |room|
+                Chat::Model::Rooms.instance.add_room(room) if room
+                self.room_form = nil
+              end
+            end
+          end
         end
+        div :class => 'clear'
+
+        if room_form
+          render room_form
+        end       
 
         render room if room
       end

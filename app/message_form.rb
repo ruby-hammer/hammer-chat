@@ -12,24 +12,16 @@ module Chat
     end
 
     class Widget < widget_class :Widget
-      def wrapper_classes
-        super << 'form'
-      end
-
-      css do
-        input do
-          width '100%'
-          margin '6px 0'
-        end
-      end
+      css { input { width '100%' }}
 
       def content
-        div :class => %w{span-22}, :style => 'height: 36px;' do
+        div :class => %w{grid_14} do
           render Hammer::Widget::Form::Field.new :component => component, :value => :text
         end
-        div :class => %w{span-2 last}, :style => 'height: 36px;' do
+        div :class => %w{grid_2} do
           input :type => :submit, :value => "Send"
         end
+        div :class => 'clear'
       end
     end
 

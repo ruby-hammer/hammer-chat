@@ -1,5 +1,5 @@
 function $dump(obj) {
-  console.debug(obj);
+  if (console.debug) console.debug(obj);
   return obj
 };
 
@@ -7,7 +7,7 @@ function $safely(func, obj) {
   try {
     return func.call(obj);
   } catch (e) {
-    console.error(e + "\n" + e.stack);
+    if (console.error) console.error(e + "\n" + e.stack);
   }
 };
 

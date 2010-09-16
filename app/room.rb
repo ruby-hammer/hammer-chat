@@ -40,11 +40,18 @@ module Chat
     class Widget < widget_class :Widget
       include Gravatarify::Helper
 
+      css do
+        img { margin_right '10px' }
+      end
+
       def content
-        h2 room.name
-        component.room.get_observers(:new).each do |room|
-          img :src => gravatar_url(room.user.email, :size => 38, :default => :wavatar), :alt => 'avatar'
+        h2 room.name, :class => 'grid_16'
+        div :class => 'grid_16' do
+          component.room.get_observers(:new).each do |room|
+            img :src => gravatar_url(room.user.email, :size => 36, :default => :wavatar), :alt => 'avatar'
+          end
         end
+        
         render message_form
         messages.each {|m| render m }
       end
