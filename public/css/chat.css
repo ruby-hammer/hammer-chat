@@ -1,9 +1,19 @@
-.hammer-component-developer-tools-widget li {
-  list-style: square;
+.chat-message_form-widget input {
+  width: 100%;
 }
 
-.hammer-component-developer-entry-widget {
-  display: block;
+.chat-rooms-widget .menu {
+  border-right: 5px solid #EFE7DA;
+  padding: 0 10px;
+}
+
+.chat-rooms-widget .menu .rooms li {
+  list-style-type: square;
+  margin-left: 20px;
+}
+
+.chat-rooms-widget .menu .rooms {
+  margin-bottom: 0;
 }
 
 .chat-widget-textarea div {
@@ -14,24 +24,28 @@
   height: 66px;
 }
 
-.chat-rooms-widget a {
-  padding: 0 0.2em;
-}
-
 .chat-message-widget img {
   margin-bottom: 18px;
 }
 
 .chat-message-widget .message {
   margin-left: -5px;
-  width: 895px;
+  width: 695px;
 }
 
 .chat-room-widget img {
   margin-right: 10px;
 }
 
-.chat-message_form-widget input {
-  width: 100%;
+.chat-room_form-widget input[type=text] {
+  width: 80px;
+}
+
+.hammer-component-developer-tools-widget li {
+  list-style: square;
+}
+
+.hammer-component-developer-entry-widget {
+  display: block;
 }
 

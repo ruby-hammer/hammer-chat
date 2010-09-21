@@ -1,30 +1,30 @@
-module Chat
-  module Model
-    class Room
-      include Hammer::Core::Observable
-      observable_events :new, :deleted
+class Chat::Model::Room
+  include DataMapper::Resource
+  include Hammer::Core::Observable
 
-      attr_reader  :messages
-      attr_accessor :name
-      def initialize(name = nil)
-        @name = name
-        @messages = []
-      end
+  property :id, Serial
+  property :name, String, :required => true, :length => 3..20
 
-      def valid?
-        @name.present?
-      end
+  belongs_to :user
+  has n, :messages
 
-      def add_message(message)
-        @messages.push message
-        notify_observers(:deleted, @messages.shift) if @messages.size > 50
-        notify_observers(:new, message)
-      end
+  class_observable_events :created, :destroyed, :edited
 
-      def last_update
-        @messages.first.try(:time) || Time.now
-      end
-
+  after :save do
+    if new?
+      self.class.notify_observers(:created, self)
+    else
+      self.class.notify_observers(:edited, self)
     end
+  end
+
+  after :destroy do
+    self.class.notify_observers(:destroyed, self)
+  end
+
+  instance_observable_events(:message_created)
+
+  def to_s
+    name
   end
 end

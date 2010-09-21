@@ -2,11 +2,11 @@ module Chat
   module Widget
     module InputGrid
       def self.included(base)
-        base.after_initialize { @label_options.merge! :class => %w[grid_2] }
+        base.after_initialize { @label_options.merge! :class => %w[grid_2 alpha] }
       end
 
       def field
-        div :class => %w{grid_3} do
+        div :class => %w{grid_3 omega} do
           super
         end
       end

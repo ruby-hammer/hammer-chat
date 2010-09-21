@@ -11,16 +11,16 @@ module Chat
         img { margin_bottom '18px' }
         class!(:message) do
           margin_left '-5px'
-          width '895px'
+          width '695px'
         end
       end
 
       def content
-        div :class => %w{grid_1} do
+        div :class => %w{grid_1 alpha} do
           img :src => gravatar_url(message.user.email, :size => 36, :default => :wavatar), :alt => 'avatar'
         end
 
-        p :class => %w{grid_15 message} do
+        p :class => %w{grid_12 message omega} do
           strong message.user
           text " - #{message.time.strftime('%H:%M:%S')}:"; br
           text "#{message.text}"

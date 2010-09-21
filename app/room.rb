@@ -1,39 +1,45 @@
 module Chat
   class Room < Hammer::Component::Base
 
-    needs :room, :user
-    attr_reader :room, :user, :message_form, :messages
+    needs :room
+    attr_reader :room, :message_form, :messages
     changing { attr_writer :message_form }
 
+    shared :user, :user=
+
     after_initialize do
-      ask_message
       @messages = []
-      room.messages.each {|m| add_message(m) }
-      room.add_observer(:new, self, :add_message)
-      room.add_observer(:deleted, self, :remove_message)
+      room.messages(:order => :time.asc, :limit => 30).each {|m| add_message(m) }
+      room.add_observer(:message_created, self, :add_message)
+      shared.add_observer(:user_changed, self, :user_change)
+      user_change
     end
 
     def leave!
-      room.delete_observer :new, self
-      room.delete_observer :deleted, self
+      room.delete_observer :message_created, self
     end
 
     changing do
       def add_message(message)
         @messages.unshift Message.new :message => message
       end
+    end
 
-      def remove_message(message)
-        @messages.delete @messages.reverse.find {|m| m.message == message }
+    def user_change
+      if user
+        ask_for_message
+      else
+        self.message_form = nil
       end
     end
 
     private
 
-    def ask_message
-      self.message_form = ask Chat::MessageForm.new(:record => Chat::Model::Message.new(user)) do |message|
-        room.add_message message
-        ask_message
+    def ask_for_message
+      self.message_form = ask Chat::MessageForm.new(:record => Chat::Model::Message.new(:room => room)) do |message|
+        pp message
+        message.save
+        ask_for_message
       end
     end
 
@@ -44,15 +50,14 @@ module Chat
         img { margin_right '10px' }
       end
 
+      def wrapper_classes
+        super.push(*%w[grid_13 alpha omega])
+      end
+
       def content
-        h2 room.name, :class => 'grid_16'
-        div :class => 'grid_16' do
-          component.room.get_observers(:new).each do |room|
-            img :src => gravatar_url(room.user.email, :size => 36, :default => :wavatar), :alt => 'avatar'
-          end
-        end
-        
-        render message_form
+        h1 room.name
+
+        render message_form # TODO check unnecessary ifs
         messages.each {|m| render m }
       end
     end

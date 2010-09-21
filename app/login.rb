@@ -5,17 +5,35 @@ module Chat
 
     include Hammer::Component::Form
     alias_method(:user, :record)
-    on_submit { answer!(user) if user.valid? }
+    attr_reader :error
+
+    on_submit do
+      if logged_user = Model::User.login(user.nick, user.password)
+        answer!(logged_user)
+      else
+        @error = true
+      end
+    end
 
     class Widget < widget_class :Widget
+      def wrapper_classes
+        super << 'grid_13'
+      end
+
       def content
-        h1 "Log in", :class => 'grid_16'
+        h1 "Log in"
+
+        if component.error
+          p 'Wrong nick or password, please try again.'
+        end
 
         render Chat::Widget::Field.new :component => component, :value => :nick, :label => 'Nick:'
-        render Chat::Widget::Field.new :component => component, :value => :email, :label => 'Gravatar email:'        
+        render Chat::Widget::Password.new :component => component, :value => :password, :label => 'Password'
 
-        div :class => %w{prefix_2 grid_2} do
+        div :class => %w{prefix_2 grid_3 alpha} do
           input :type => :submit, :value => "Log in"
+          text ' '
+          link_to('Cancel').action { answer! }
         end
         div :class => 'clear'
       end

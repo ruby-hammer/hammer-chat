@@ -5,8 +5,9 @@ module Chat
     alias_method(:message, :record)
 
     on_submit do
+      message.user = shared.user
+      message.time = Time.now
       if message.valid?
-        message.time!
         answer!(message)
       end
     end
@@ -15,10 +16,10 @@ module Chat
       css { input { width '100%' }}
 
       def content
-        div :class => %w{grid_14} do
+        div :class => %w{grid_11 alpha} do
           render Hammer::Widget::Form::Field.new :component => component, :value => :text
         end
-        div :class => %w{grid_2} do
+        div :class => %w{grid_2 omega} do
           input :type => :submit, :value => "Send"
         end
         div :class => 'clear'

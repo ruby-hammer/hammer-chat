@@ -1,22 +1,19 @@
-module Chat
-  module Model
-    class Message
+class Chat::Model::Message
+  include DataMapper::Resource
 
-      attr_reader :user, :time
-      attr_accessor :text
-      def initialize(user, text = nil)
-        @user, @text = user, text
-      end
+  property :id, Serial
+  property :text, Text, :required => true, :lazy => false
+  property :time, DateTime
 
-      def valid?
-        @text.present?
-      end
+  belongs_to :user
+  belongs_to :room
 
-      def time!
-        @time = Time.now
-      end
-
-    end
-
+  before :save do
+    @was_new = new?
   end
+
+  after :save do
+    room.notify_observers(:message_created, self) if @was_new
+  end
+
 end

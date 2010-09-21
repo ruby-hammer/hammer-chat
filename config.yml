@@ -5,6 +5,9 @@
 :app:
   :name: "Chat"
   :shared: "Chat::Shared"
+  :db:
+    :development: "sqlite:db.sqlite"
+
 #:websocket:
 #  :server: 192.168.15.100
 #  :host: 0.0.0.0

@@ -1,86 +1,124 @@
 module Chat
   class Rooms < Hammer::Component::Base
 
-    attr_reader :room, :room_form
-    changing { attr_writer :room_form, :room  }
+    attr_reader :room, :room_form, :a_form
+    changing { attr_writer :room, :room_form, :a_form  }
+
     shared :user, :user=
 
+    Struct.new("User", :nick, :password)
+
     after_initialize do
-      shared.add_observer(:user_changed, self) do
-        user_changed
-      end
-      user_changed
-    end
-
-    def user_changed
-      unless user
-        logout
-        pass_on ask(Login.new(:record => Model::User.new)) { |user|
-          File.open('users.log', 'a') { |f| f.write "#{user.nick}\t#{user.email}\n"  }
-          self.user = user
-        }
-      else
-        login
-      end
-      change!
-    end
-
-    def rooms_changed(room)
-      change!
+      shared.add_observer(:user_changed, self) { change! }
+      Chat::Model::Room.add_observer(:created, self) { change! }
+      Chat::Model::Room.add_observer(:edited, self) { change! }
+      Chat::Model::Room.add_observer(:destroyed, self) { change! }
+      new_room
     end
 
     private
 
-    def login
-      retake_control!
-      Chat::Model::Rooms.instance.add_observer(:new, self, :rooms_changed)
-      Chat::Model::Rooms.instance.add_observer(:deleted, self, :rooms_changed)
-    end
-
-    def logout
-      Chat::Model::Rooms.instance.delete_observer(:new, self)
-      Chat::Model::Rooms.instance.delete_observer(:deleted, self)
+    def new_room
+      self.room_form = ask Chat::RoomForm.new(:record => Chat::Model::Room.new) do |room|
+        room.save
+        new_room
+      end
     end
 
     class Widget < widget_class :Widget
-
       css do
-        a { padding '0 0.2em' }
+        class!(:menu) {
+          border_right '5px solid #EFE7DA'
+          padding '0 10px'
+        }
+        class!(:menu) >> class!(:rooms) >> li {
+          list_style_type 'square'
+          margin_left '20px'
+        }
+        class!(:menu) >> class!(:rooms) {
+          margin_bottom 0
+        }
       end
 
-      def content        
-        h1 "Chat rooms", :class => 'grid_16'
-        p :class => 'grid_16' do
+      def content
+        div(:class => %w[grid_3]) { menu }
+        div(:class => %w[grid_13]) { main }
+        div :class => 'clear'
+      end
 
-          Model::Rooms.instance.rooms.each do |r|
-            link_to("#{r.name}").action do
-              self.room.try :leave!
-              self.room = Chat::Room.new :room => r, :user => user
-            end
-          end
+      def menu
+        div :class => 'menu' do
+          h1 "Chat"
+          ul do
+            unless user
+              li do
+                link_to('Sign in').action do
+                  self.a_form = ask(UserForm.new(:record => Model::User.new, :title => 'Sign in')) do |user|
+                    if user
+                      user.save!
+                      self.user = user
+                    end
+                    self.a_form = nil
+                  end
+                end
+              end
 
-          link_to('Logout').action do
-            self.user = nil
-          end
+              li do
+                link_to('Login').action do
+                  self.a_form = ask(Login.new(:record => Struct::User.new)) do |user|
+                    if user
+                      self.user = user
+                    end
+                    self.a_form = nil
+                  end
+                end
+              end
+            else
+              li do
+                link_to("Logout '#{user}'").action do
+                  self.user = nil
+                end
+              end
 
-          unless room_form
-            link_to('New room').action do
-              self.room_form = ask Chat::RoomForm.new(:record => Chat::Model::Room.new) do |room|
-                Chat::Model::Rooms.instance.add_room(room) if room
-                self.room_form = nil
+              li do
+                link_to("Edit '#{user}'").action do
+                  self.a_form = ask(UserForm.new(:record => user, :title => 'Edit my profile')) do |user|
+                    if user
+                      user.save!
+                      self.user = user
+                    end
+                    self.a_form = nil
+                  end
+                end
               end
             end
           end
+
+          h2 "Rooms"
+          ul :class => 'rooms' do
+            Model::Room.all.each do |r|
+              li do
+                link_to("#{r.name}").action do # FIXME when img in link event on click does not fire
+                  self.room.try :leave!
+                  self.room = Chat::Room.new :room => r
+                end
+                text ' '
+                link_to('delete').action do
+                  r.messages.destroy
+                  r.destroy
+                  self.room = nil if self.room.try(:room) == r
+                end if r.user == user
+              end
+            end
+          end
+          render room_form if user
         end
-        div :class => 'clear'
-
-        if room_form
-          render room_form
-        end       
-
-        render room if room
       end
-    end
 
+      def main
+        render a_form || room
+      end
+
+    end
   end
 end
