@@ -1,5 +1,6 @@
 class Chat::Model::Message
   include DataMapper::Resource
+  include Hammer::Core::Observable
 
   property :id, Serial
   property :text, Text, :required => true, :lazy => false
@@ -12,8 +13,10 @@ class Chat::Model::Message
     @was_new = new?
   end
 
+  class_observable_events(:created)
+
   after :save do
-    room.notify_observers(:message_created, self) if @was_new
+    room.class.notify_observers(:created, room_id, id) if @was_new
   end
 
 end

@@ -10,13 +10,18 @@ module Chat
     after_initialize do
       @messages = []
       room.messages(:order => :time.asc, :limit => 30).each {|m| add_message(m) }
-      room.add_observer(:message_created, self, :add_message)
+      room.class.add_observer(:created, self, :on_message_created)
       shared.add_observer(:user_changed, self, :user_change)
       user_change
     end
 
     def leave!
       room.delete_observer :message_created, self
+    end
+
+    def on_message_created(room_id, message_id)
+      return unless room_id == room.id
+      add_message Chat::Model::Message.get(message_id)
     end
 
     changing do

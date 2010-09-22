@@ -22,8 +22,6 @@ class Chat::Model::Room
     self.class.notify_observers(:destroyed, self)
   end
 
-  instance_observable_events(:message_created)
-
   def to_s
     name
   end

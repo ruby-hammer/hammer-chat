@@ -16,6 +16,12 @@ install bundler and run Bundler
     gem install bundler
     bundle install
 
+setup DB
+
+    irb
+    >> require 'hammer/app'
+    >> DataMapper.auto_migrate!
+
 use Ruby 1.9.(1|2) and run hammer
 
     hammer

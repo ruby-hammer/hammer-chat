@@ -1,3 +1,19 @@
+.chat-room-widget img {
+  margin-right: 10px;
+}
+
+.chat-room_form-widget input[type=text] {
+  width: 80px;
+}
+
+.hammer-component-developer-tools-widget li {
+  list-style: square;
+}
+
+.hammer-component-developer-entry-widget {
+  display: block;
+}
+
 .chat-message_form-widget input {
   width: 100%;
 }
@@ -31,21 +47,5 @@
 .chat-message-widget .message {
   margin-left: -5px;
   width: 695px;
-}
-
-.chat-room-widget img {
-  margin-right: 10px;
-}
-
-.chat-room_form-widget input[type=text] {
-  width: 80px;
-}
-
-.hammer-component-developer-tools-widget li {
-  list-style: square;
-}
-
-.hammer-component-developer-entry-widget {
-  display: block;
 }
 
